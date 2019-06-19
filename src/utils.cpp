@@ -1,0 +1,618 @@
+
+
+#include "utils.h"
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+double L2_norm(std::vector<IloNum>& u)
+{
+	double accum = 0.;
+	for (int i = 0; i < u.size(); ++i) 
+	{
+		accum += u[i] * u[i];
+	}
+	double norm = sqrt(accum);
+	return norm;
+}
+
+double L2_norm_double(std::vector<double>& u)
+{
+	double accum = 0.;
+	for (int i = 0; i < u.size(); ++i) {
+		accum += u[i] * u[i];
+	}
+	double norm = sqrt(accum);
+	return norm;
+}
+
+double L2_norm_double_pos(std::vector<double>& u)
+{
+	double accum = 0.;
+	for (int i = 0; i < u.size(); ++i) {
+		if (u[i] > 0){
+			accum += u[i] * u[i];
+		}		
+	}
+	double norm = sqrt(accum);
+	return norm;
+}
+
+//Function for average
+double avg_func(std::vector<double>& vv)
+{
+	double return_value = 0.0;
+	int n = vv.size();
+
+	for (int i = 0; i < n; i++)
+	{
+		return_value += vv[i];
+	}
+
+	return (return_value / n);
+}
+//****************End of average funtion****************
+
+bool falls_in_range(vec2_d& range, vec_d& val)
+{
+	bool pass = true;
+
+	for (int i = 0; i < range.size(); i++)
+	{
+		if (val[i] >= range[i][1] || val[i] <= range[i][0])
+		{
+			pass = false;
+			break;
+		}
+	}
+
+	return pass;
+}
+
+//Function for variance
+double variance_func(std::vector<double>& vec)
+{
+
+	double mean = avg_func(vec);
+	int n = vec.size();
+	double sum = 0.0;
+
+	for (int j = 0; j < n; j++)
+	{
+		sum += pow((vec[j] - mean), 2);
+	}
+
+	double var = sum / ((double)(n - 1));
+
+	return var;
+}
+//****************End of variance funtion****************
+
+//Function for variance
+double variance_func_i(std::vector<int>& vec)
+{
+
+	int summ = accumulate(vec.begin(), vec.end(),0);
+	double mean = summ / (double)vec.size();
+	int n = vec.size();
+	double sum = 0.0;
+
+	for (int j = 0; j < n; j++)
+	{
+		sum += pow((vec[j] - mean), 2);
+	}
+
+	double var = sum / ((double)(n - 1));
+
+	return var;
+}
+//****************End of variance funtion****************
+
+// check if it is in a vector function
+
+bool inVector(std::vector<double>& vec, double& tmp)
+{
+
+	bool isInV;
+
+	isInV = (std::find(vec.begin(), vec.end(), tmp) != vec.end());
+
+	return isInV;
+
+
+}
+
+//****************End of check if it is in a vector funtion****************
+
+// check if it is in a vector 2d function
+
+bool inVector2d(vec2_d& vec, vec_d& tmp)
+{
+
+	bool isInV = false;
+
+	for (vec2_d::iterator it = vec.begin(); it != vec.end(); it++) {
+		if (*it == tmp) 
+		{
+		   isInV = true;
+		}
+	}
+
+	return isInV;
+
+
+}
+
+//****************End of check if it is in a vector 2d funtion****************
+
+// check if it is in a vector 2Num function
+
+bool inVector2Num(std::vector<std::vector<IloNum>>& vec, std::vector<IloNum>& tmp)
+{
+
+	bool isInV;
+
+	isInV = (std::find(vec.begin(), vec.end(), tmp) != vec.end());
+
+	return isInV;
+
+
+}
+
+//****************End of check if it is in a vector 2Num funtion****************
+
+// check if it is in a 2vector function
+
+bool in2Vector(vec2_d& vec, vec_d& tmp, int& pos)
+{
+
+
+	bool isInV = false;
+
+	for (vec2_d::iterator it = vec.begin(); it != vec.end(); it++) {
+		if (*it == tmp)
+		{
+			isInV = true;
+			pos = distance(vec.begin(), it);
+			break;
+		}
+	}
+
+	return isInV;
+
+}
+
+//****************End of check if it is in a 2vector funtion****************
+
+
+// check if it is in a vector function
+
+bool in_intVector(std::vector<int>& vec, int& tmp)
+{
+
+	bool isInV;
+
+	isInV = (std::find(vec.begin(), vec.end(), tmp) != vec.end());
+
+	return isInV;
+
+
+}
+
+//****************End of check if it is in a vector funtion****************
+
+// find the position of a tmp in a vector
+int findVector(std::vector<double>& vec, double& tmp)
+{
+
+	std::vector<double>::iterator locc;
+	locc = std::find(vec.begin(), vec.end(), tmp);
+	int loc = distance(vec.begin(), locc);
+
+	return loc;
+
+}
+//****************End of find the position of a tmp in a vector funtion****************
+
+int findVector2(vec2_d& vec, vec_d& tmp)
+{
+	vec2_d::iterator locc;
+	locc = std::find(vec.begin(), vec.end(), tmp);
+	int loc = distance(vec.begin(), locc);
+
+	return loc;
+}
+
+// find the position of a tmp in a vector
+int findintVector(std::vector<int>& vec, int& tmp)
+{
+
+	std::vector<int>::iterator locc;
+	locc = std::find(vec.begin(), vec.end(), tmp);
+	int loc = distance(vec.begin(), locc);
+
+	return loc;
+
+}
+
+// find maximum value in a vector
+int maxVector(std::vector<double>& vec)
+{
+
+	std::vector<double>::iterator result;
+	result = std::max_element(vec.begin(), vec.end());
+	int loc = std::distance(vec.begin(), result);
+
+	return loc;
+}
+//****************End of find maximum value in a vectorfuntion****************
+
+// find a number of maximum values in a vector
+std::vector<int> maxVector_num(std::vector<double> vec, int num)
+{
+
+	int N = vec.size();
+	std::vector<double> tmp;
+	tmp = vec;
+	std::vector<int> result;
+	sort(tmp.begin(), tmp.end());
+	for (int i = N - 1; i > N - num - 1; i--){
+		int loc = findVector(vec, tmp[i]);
+		result.push_back(loc);
+	}
+
+	return result;
+}
+//****************End of find maximum value in a vectorfuntion****************
+
+// find a number of minimum values in a vector
+std::vector<int> minVector_num(std::vector<double> vec, int num)
+{
+
+	int N = vec.size();
+	std::vector<double> tmp;
+	tmp = vec;
+	std::vector<int> result;
+	sort(tmp.begin(), tmp.end());
+	for (int l = 0; l < num; l++){
+		int loc = findVector(vec, tmp[l]);
+		result.push_back(loc);
+	}
+
+	return result;
+}
+//****************End of find minimum value in a vectorfuntion****************
+// find a number of minimum values in a vector
+std::vector<int> meanVector_num(std::vector<double> vec, int num)
+{
+
+	int N = vec.size();
+	std::vector<double> tmp;
+	tmp = vec;
+	std::vector<int> result;
+	sort(tmp.begin(), tmp.end());
+	int ll = round(N / 2) - floor(num / 2);
+	int uu = round(N / 2) + floor(num / 2) + 1;
+
+	for (int l = ll; l < uu; l++){
+		int loc = findVector(vec, tmp[l]);
+		result.push_back(loc);
+	}
+
+	return result;
+}
+//****************End of find minimum value in a vectorfuntion****************
+// find minimum value in a vector
+int minVector(std::vector<double>& vec)
+{
+
+	std::vector<double>::iterator result;
+	result = std::min_element(vec.begin(), vec.end());
+	int loc = std::distance(vec.begin(), result);
+
+	return loc;
+}
+//****************End of find minimum value in a vectorfuntion****************
+
+// find maximum value in a vector
+int maxintVector(std::vector<int>& vec)
+{
+
+	std::vector<int>::iterator result;
+	result = std::max_element(vec.begin(), vec.end());
+	int loc = std::distance(vec.begin(), result);
+
+	return loc;
+}
+//****************End of find maximum value in a vectorfuntion****************
+
+// find minimum value in a vector
+int minintVector(std::vector<int>& vec)
+{
+
+	std::vector<int>::iterator result;
+	result = std::min_element(vec.begin(), vec.end());
+	int loc = std::distance(vec.begin(), result);
+
+	return loc;
+}
+//****************End of find minimum value in a vectorfuntion****************
+
+// || v - u||^2
+double l2normOfminus_vec(std::vector<double>& v, std::vector<double>& u)
+{
+
+	double d_uv = 0;
+	int v_size = v.size();
+
+	for (int n = 0; n < v_size; n++)
+	{
+		double tmp = abs(v[n] - u[n]);
+		d_uv += tmp*tmp;
+	}
+
+	return d_uv;
+}
+//****************End of || v - u||^2****************
+
+vec_d element_w_prod(vec_d& v, vec_d& u)
+{
+	
+	vec_d out;
+
+	for (int i = 0; i < v.size(); i++) out.push_back(v[i] * u[i]);
+
+	return out;
+
+}
+
+vec_d const_prod(vec_d& v, double w)
+{
+	vec_d out;
+
+	for (int i = 0; i < v.size(); i++) out.push_back(v[i] * w);
+
+	return out;
+}
+
+// interval limits update
+void   update_LHS_interval(vec2_d& Large_HC_limits, vec2_d& HC_limits)
+{
+	int vec_num = Large_HC_limits[0].size();
+
+	for (int r = 0; r < vec_num; r++)
+	{
+		if (Large_HC_limits[0][r] > HC_limits[0][r])
+		{
+			Large_HC_limits[0][r] = HC_limits[0][r];
+		}
+		if (Large_HC_limits[1][r] < HC_limits[1][r])
+		{
+			Large_HC_limits[1][r] = HC_limits[1][r];
+		}
+	}
+
+}
+//****************End of updating the interval limits****************
+
+// Finding the center of each cluster
+void   update_center_cluster(vec_d& Center_Pi, vec_d& Pi, int pi_num)
+{
+	int vec_num = Center_Pi.size();
+
+	for (int r = 0; r < vec_num; r++)
+	{
+		Center_Pi[r] = Center_Pi[r] * ((double)(pi_num) / (pi_num + 1)) +
+			((double)1 / (pi_num + 1)) * Pi[r];
+	}
+	
+
+}
+//****************End of Finding the center of each cluster****************
+
+/// Mean VEctor
+double mean_vec_d(std::vector<double>& v)
+{
+	double sum = std::accumulate(v.begin(), v.end(), 0.0);
+	double mean = sum / v.size();
+	return mean;
+}
+
+//****************End of mean vector****************
+
+/// STD VEctor
+double std_vec_d(std::vector<double>& v)
+{
+	double stdes = std::sqrt(variance_func(v));
+	return stdes;
+}
+
+double std_vec_d(vec2_d& v)
+{
+	double stdes = 0;
+	
+	for (int i = 0; i < v.size(); i++)
+	{
+		stdes += std::sqrt(variance_func(v[i]));
+	}
+
+	stdes = stdes / v.size();
+
+	return stdes;
+}
+
+//****************End of STD vector****************
+
+/// STD VEctor
+double std_vec_i(std::vector<int>& v)
+{
+	double stdes = std::sqrt(variance_func_i(v));
+	return stdes;
+}
+
+//****************End of STD vector****************
+
+/// Square VEctor
+double square_vec_d(std::vector<double>& v)
+{
+	double sumv = accumulate(v.begin(), v.end(), 0.0);
+	double aver = sumv / (double)v.size();
+	double sqr = 0;
+	for (int i = 0; i < v.size(); i++) sqr += (v[i] - aver)*(v[i] - aver);
+	return sqr/(v.size() - 1);
+}
+
+/// Square VEctor
+double square_vec_d(vec2_d& v)
+{
+	double ssw = 0;
+	
+	for (int i = 0; i < v.size(); i++)
+	{
+		ssw += square_vec_d(v[i]);
+	}
+
+	return ssw / (v.size() - 1);
+}
+
+//****************End of Square vector****************
+
+void print_vectori(vec_i& v)
+{
+	for (std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
+		std::cout << *i << ' ';
+}
+
+void print_vectord(vec_d& v)
+{
+	for (std::vector<double>::const_iterator i = v.begin(); i != v.end(); ++i)
+		std::cout << *i << ' ';
+	std::cout << std::endl;
+}
+void print_vectord(vec2_d& v)
+{
+	for (vec2_d::const_iterator i = v.begin(); i != v.end(); ++i)
+	{
+		for (vec_d::const_iterator j = i->begin(); j != i->end(); ++j)
+		{
+			std::cout << *j << ' ';
+		}
+		std::cout << std::endl;
+	}
+		
+	std::cout << std::endl;
+}
+//*****************************************************
+
+double sum_square(vec_d& v)
+{
+	double m = mean_vec_d(v);
+	double ss = 0;
+	for (int i = 0; i < v.size(); i++) ss += (v[i] - m)*(v[i] - m);
+	return ss;
+}
+
+//******************************************************
+
+vec_d get_Centre(vec2_d& v)
+{
+	vec_d empt;
+
+	for (int i = 0; i < v.size(); i++)
+	{
+		double tmp = 0;
+		for (int j = 0; j < v[i].size(); j++)
+		{
+			tmp += v[i][j];
+		}
+		empt.push_back(tmp / (double)v[i].size());
+	}
+
+	return empt;
+}
+
+//******************************************************
+
+double L1_dist(vec_d& v, vec_d& u)
+{
+	double ans = 0;
+
+	for (int i = 0; i < v.size(); i++)
+	{
+		ans += abs(v[i] - u[i]);
+	}
+
+	return ans;
+}
+
+//********************************************************
+
+vec_d prod_components(vec_d& v, vec_d& u)
+{
+	int vsize = v.size();
+	int usize = u.size();
+	vec_d empt;
+
+	if (vsize == usize)
+	{
+		for (int i = 0; i < vsize; i++)
+		{
+			empt.push_back(v[i] * u[i]);
+		}
+	}
+	else
+	{
+		printf("Prod Components: sizes are not equal!");
+	}
+
+	return empt;
+}
+
+//********************************************************
+
+int max_diff(vec_d& v, double& val)
+{
+	int idx;
+	int max_val = -INFINITY;
+
+	for (int i = 0; i < v.size(); i++)
+	{
+		if (max_val < abs(v[i] - val))
+		{
+			idx = i;
+			max_val = abs(v[i] - val);
+ 		}
+	}
+
+	return idx;
+
+}
+
+//********************************************************
+
+int max2_diff(vec_d& v, vec_d& u)
+{
+	int idx;
+	int max_val = -INFINITY;
+
+	if (v.size() == u.size())
+	{
+		for (int i = 0; i < v.size(); i++)
+		{
+			if (max_val < abs(v[i] - u[i]))
+			{
+				max_val = abs(v[i] - u[i]);
+				idx = i;
+			}
+		}
+	}
+	else
+	{
+		printf("Prod Components: sizes are not equal!");
+	}
+
+
+	return idx;
+}
+
+//********************************************************
