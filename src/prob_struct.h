@@ -127,22 +127,22 @@ struct var_vec {
 
 //Problem structure
 struct Prob {
-	IloEnv   *env;
-	IloModel model;
-	IloCplex cplex;
+	IloEnv   * env;
+	IloModel * model;
+	IloCplex * cplex;
 	bool isRaw;        //the raw prob is the one without seperated structures 
 	                   //like rngs and vars and it just stored as a whole
 	const char *name;
-	std::string strType;
+	std::string * strType;
 	//--------------------------------
-	IloRangeArray range_raw;
-	IloNumVarArray vars_raw;
+	IloRangeArray * range_raw;
+	IloNumVarArray * vars_raw;
 	bool has_surrogate;
-	IloNumVarArray surro_vars_raw;
-	vec2_i       surro_idx;           //index of the surrogate variables for adaptive sampling
+	IloNumVarArray * surro_vars_raw;
+	vec2_i       * surro_idx;           //index of the surrogate variables for adaptive sampling
 	bool has_R;
-	IloNumVarArray R_vars_raw;
-	IloObjective    obj_raw;
+	IloNumVarArray * R_vars_raw;
+	IloObjective    * obj_raw;
 	//---------------------------------
 
 	//QP obj parameters----------------
@@ -152,51 +152,51 @@ struct Prob {
 	//---------------------------------
 
 	//Other Cuts ----------------------
-	IloRangeArray LShaped_opt;
-	IloRangeArray LShaped_opt_iter;
-	IloRangeArray LShaped_feas;
-	IloRangeArray master_cuts;
-	std::vector<IloRange> other_cuts;
+	IloRangeArray * LShaped_opt;
+	IloRangeArray * LShaped_opt_iter;
+	IloRangeArray * LShaped_feas;
+	IloRangeArray * master_cuts;
+	std::vector<IloRange> * other_cuts;
 	bool opt;
 	bool feas;
 	//---------------------------------
 
-	int num_var;
-	int num_rng;
+	const int * num_var;
+	const int * num_rng;
 
-	std::vector<Coeff_Sparse> obj_coef_raw;
-	std::vector<std::vector<Coeff_Sparse>> rng_coefs_raw;
+	std::vector<Coeff_Sparse> * obj_coef_raw;
+	std::vector<std::vector<Coeff_Sparse>> * rng_coefs_raw;
 
 	//Previous Stages INFOs
-	std::vector<std::vector<Coeff_Sparse>> prev_rng_coefs_raw;
-	std::vector<IloNumVarArray> prev_vars_raw;
+	std::vector<std::vector<Coeff_Sparse>> * prev_rng_coefs_raw;
+	std::vector<IloNumVarArray> * prev_vars_raw;
 
 	int type; //0(LP) - IP(1) - MIP(2)
-	std::string probType;
+	std::string * probType;
 
 	bool random;      //is it a random problem
 	int type_random;  //(0)rhs - (1)obj - (3)coeffs - (4)rhsobj - ...
-	std::string id;
+	std::string * id;
 
 	//solution INFO------------------
 	double zstar;
 	double zstar_wout_surro;
-	std::vector<SOL_str>  sol;
-	std::vector<SOL_str>  xhat;  //if the answer in regularized around xhat
+	std::vector<SOL_str>  * sol;
+	std::vector<SOL_str>  * xhat;  //if the answer in regularized around xhat
 	bool             isReg; //is a regularized problem
-	std::vector<SOL_str>  sol_surrogate;
-	std::vector<SOL_str>  sol_R;
-	std::vector<SOL_str>  duals;
-	vec_d            dual_tot;// duals
-	vec_d            dual_R;  // dual of the random parts for random problems
-	vec_d            rho;     // r(w) - Cx
-	vec_d            Cx;      // Cx
-	vec2_d           beta;    // beta = C
-	vec_d            beta_sum;   // beta = sum(r in ranges, C(r))
-	vec_d            r_w;        // r(w)
-	std::vector<SOL_str>  opt_cut_duals;
-	std::vector<SOL_str>  feas_cut_duals;
-	std::vector<SOL_str>  rhs;
+	std::vector<SOL_str>  * sol_surrogate;
+	std::vector<SOL_str>  * sol_R;
+	std::vector<SOL_str>  * duals;
+	vec_d            * dual_tot;// duals
+	vec_d            * dual_R;  // dual of the random parts for random problems
+	vec_d            * rho;     // r(w) - Cx
+	vec_d            * Cx;      // Cx
+	vec2_d           * beta;    // beta = C
+	vec_d            * beta_sum;   // beta = sum(r in ranges, C(r))
+	vec_d            * r_w;        // r(w)
+	std::vector<SOL_str>  * opt_cut_duals;
+	std::vector<SOL_str>  * feas_cut_duals;
+	std::vector<SOL_str>  * rhs;
 	//---------------------------------
 
 	//print name
@@ -210,15 +210,15 @@ struct RV_info
 	int rv_type;    //(0)RHS - (1)Cost - (2)Coeff
 	int rv_row_num; //row number 
 	int rv_col_num; //colum number 
-	std::string ColName;
-	std::string RowName;
+	const std::string * ColName;
+	const std::string * RowName;
 
-	const char *name;
-	std::string id;
+	const char * name;
+	std::string * id;
 
 	//probability distribution info
-	vec_d val;
-	vec_d prob;
+	vec_d * val;
+	vec_d * prob;
 
 	//normal distribution
 	double mean;
@@ -229,7 +229,7 @@ struct RV_info
 	double u;
 
 	//CDF info
-	std::map<double, double> CDF;  //map<val, cumulative prob>
+	std::map<double, double> * CDF;  //map<val, cumulative prob>
 
 };
 //**************************************************************************
@@ -237,14 +237,14 @@ struct RV_info
 //General information of the stohastic programs 
 struct SPProb_INFO
 {
-	int num_var;
-	int num_rngs;
-	int rv_num;
-	int stage_num;
+	const int * num_var;
+	const int * num_rngs;
+	const int * rv_num;
+	const int * stage_num;
 
-	int SAA_iter;
-	int initial_scen_num;
-	int dynamic_scen_num;
+	const int * SAA_iter;
+	const int * initial_scen_num;
+	const int * dynamic_scen_num;
 
 	std::string file_name;
 	std::string test_instance;
@@ -260,13 +260,13 @@ struct SPProb_INFO
 	std::string algo_type;
 
 	//Time info:
-	std::vector<std::vector<std::string>> TIME_info;
-	std::vector<int>            TIME_col_idx;
-	std::vector<int>            TIME_row_idx;
+	std::vector<std::vector<std::string>> * TIME_info;
+	std::vector<int>            * TIME_col_idx;
+	std::vector<int>            * TIME_row_idx;
 
 	//StOC INFO
-	std::vector<RV_info>  RVs;
-	std::string STOC_TYPE;
+	std::vector<RV_info>  * RVs;
+	std::string * STOC_TYPE;
 
 };
 //**************************************************************************

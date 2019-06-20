@@ -6,66 +6,74 @@
 ProbPrep::ProbPrep()
 {
 	printHeader();
+	SPprobINFO  = new SPProb_INFO();
+	solver      = new Solver_CPLEX();
+	master_prob = new Prob();
+	mean_prob   = new Prob();
 }
 
 ProbPrep::~ProbPrep()
 {
-	solver.end_solver();
+	solver->end_solver();
+	delete solver;
+	delete master_prob;
+	delete mean_prob;
+	delete stage_sub_prob;
 }
 
 void ProbPrep::initialize(std::string filename, int scen_num)
 {
 	
-	SPprobINFO.file_name = filename;
-	SPprobINFO.initial_scen_num = scen_num;
+	SPprobINFO->file_name = filename;
+	SPprobINFO->initial_scen_num = &scen_num;
 
 	if (Algorithm == 0)
 	{
-		SPprobINFO.algorithm = "LShaped";
+		SPprobINFO->algorithm = "LShaped";
 	}
 	else
 	{
-		SPprobINFO.algorithm = "PH";
+		SPprobINFO->algorithm = "PH";
 	}
-	SPprobINFO.dirr_model = ".\\model\\" + SPprobINFO.file_name + "\\";
-	SPprobINFO.dirr_algo = ".\\Algorithm\\" + SPprobINFO.algorithm + "\\" + SPprobINFO.file_name + "\\";
-	SPprobINFO.dirr_input = ".\\Input\\" + SPprobINFO.file_name + "\\";
-	SPprobINFO.dirr_saa = ".\\SAA\\" + SPprobINFO.algorithm + "\\" + SPprobINFO.file_name + "\\";
-	SPprobINFO.algo_type = ".txt";
-	SPprobINFO.model_type = ".lp";
-	SPprobINFO.output_algo = SPprobINFO.file_name + "_" + std::to_string(SPprobINFO.initial_scen_num) + "_";
-	SPprobINFO.output_model = "model_" + SPprobINFO.file_name + "_";
-	SPprobINFO.output_saa = "SAA_" + SPprobINFO.file_name + "_";
+	SPprobINFO->dirr_model = ".\\model\\" + SPprobINFO->file_name + "\\";
+	SPprobINFO->dirr_algo = ".\\Algorithm\\" + SPprobINFO->algorithm + "\\" + SPprobINFO->file_name + "\\";
+	SPprobINFO->dirr_input = ".\\Input\\" + SPprobINFO->file_name + "\\";
+	SPprobINFO->dirr_saa = ".\\SAA\\" + SPprobINFO->algorithm + "\\" + SPprobINFO->file_name + "\\";
+	SPprobINFO->algo_type = ".txt";
+	SPprobINFO->model_type = ".lp";
+	SPprobINFO->output_algo = SPprobINFO->file_name + "_" + std::to_string(*SPprobINFO->initial_scen_num) + "_";
+	SPprobINFO->output_model = "model_" + SPprobINFO->file_name + "_";
+	SPprobINFO->output_saa = "SAA_" + SPprobINFO->file_name + "_";
 
 	if (Regular_LShaped == 1) {
-		SPprobINFO.output_algo += "reg_";
+		SPprobINFO->output_algo += "reg_";
 	}
 
 	if (Multi_LShaped == 1) {
-		SPprobINFO.output_algo += "mult";
+		SPprobINFO->output_algo += "mult";
 	}
 
 	if (Regular_LShaped == 1) {
-		SPprobINFO.output_saa += "reg_";
+		SPprobINFO->output_saa += "reg_";
 	}
 	if (Sampling_Method == 0) {
-		SPprobINFO.output_saa += "mont_";
+		SPprobINFO->output_saa += "mont_";
 	}
 	else if (Sampling_Method == 1) {
-		SPprobINFO.output_saa += "lhs_";
+		SPprobINFO->output_saa += "lhs_";
 	}
 	if (Multi_LShaped == 1) {
-		SPprobINFO.output_saa += "mult_";
+		SPprobINFO->output_saa += "mult_";
 	}
 
 	Probs_from_SMPS();
 
 	if (Algorithm == 0)
 	{
-		master_prob = create_master_prob();
-		for (int st = 1; st < SPprobINFO.stage_num; st++)
+		*master_prob = create_master_prob();
+		for (int st = 1; st < *SPprobINFO->stage_num; st++)
 		{
-			stage_sub_prob.push_back(create_sub_probs(st));
+			stage_sub_prob->push_back(create_sub_probs(st));
 			//cout << " RHS size" << stage_sub_prob[0].rhs.size();
 			//cout << stage_sub_prob[0].model << endl;
 		}
@@ -108,43 +116,43 @@ void ProbPrep::Probs_from_SMPS()
 
 void ProbPrep::read_COR()
 {
-	solver.open_solver();
+	solver->open_solver();
 
-	std::string CORfileName = SPprobINFO.dirr_input + SPprobINFO.file_name + ".cor";
+	std::string CORfileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".cor";
 	std::cout << "looking for: " << CORfileName << std::endl;
-	mean_prob.name = CORfileName.c_str();
-	mean_prob.strType = "mean";
-	solver.open_prob(mean_prob);
-	solver.ImportModel(mean_prob);
+	mean_prob->name = CORfileName.c_str();
+	*mean_prob->strType = "mean";
+	solver->open_prob(*mean_prob);
+	solver->ImportModel(*mean_prob);
 	if (false) printf(" ** flag ** \n");
-	if (show_meanprob == 1) std::cout << mean_prob.model << std::endl;
+	if (show_meanprob == 1) std::cout << mean_prob->model << std::endl;
 
-	solver.get_Linear_obj_coeffs(mean_prob);
-	solver.get_Linear_rng_coeffs(mean_prob);
+	solver->get_Linear_obj_coeffs(*mean_prob);
+	solver->get_Linear_rng_coeffs(*mean_prob);
 
-	SPprobINFO.num_var = mean_prob.num_var;
-	SPprobINFO.num_rngs = mean_prob.num_rng;
+	SPprobINFO->num_var = mean_prob->num_var;
+	SPprobINFO->num_rngs = mean_prob->num_rng;
 
-	mean_prob.opt = false;
-	mean_prob.feas = false;
+	mean_prob->opt = false;
+	mean_prob->feas = false;
 	
-	mean_prob.isReg = false;
-	solver.Create_Prob(mean_prob);
-	solver.Solve_Prob(mean_prob, false);
+	mean_prob->isReg = false;
+	solver->Create_Prob(*mean_prob);
+	solver->Solve_Prob(*mean_prob, false);
 
 	
-	mean_prob.model_name = SPprobINFO.dirr_model + SPprobINFO.output_model +
-		"mean" + SPprobINFO.model_type;
-	mean_prob.name = mean_prob.model_name.c_str();
+	mean_prob->model_name = SPprobINFO->dirr_model + SPprobINFO->output_model +
+		"mean" + SPprobINFO->model_type;
+	mean_prob->name = mean_prob->model_name.c_str();
 
-	if (print_lp_models == 1) solver.Print_Prob(mean_prob);
+	if (print_lp_models == 1) solver->Print_Prob(*mean_prob);
 
-	std::cout << "Objective Function of the Mean Problem:  " << mean_prob.zstar << std::endl;
+	std::cout << "Objective Function of the Mean Problem:  " << mean_prob->zstar << std::endl;
 }
 
 void ProbPrep::read_TIM()
 {
-	std::string TIMfileName = SPprobINFO.dirr_input + SPprobINFO.file_name + ".tim";
+	std::string TIMfileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".tim";
 	std::ifstream TIMfileStream;
 	TIMfileStream.open(TIMfileName.c_str());
 
@@ -164,15 +172,15 @@ void ProbPrep::read_TIM()
 		std::string col_name, row_name;
 		lineStream >> col_name >> row_name;		
 
-		SPprobINFO.TIME_info.push_back(std::vector<std::string>(2));
+		SPprobINFO->TIME_info->push_back(std::vector<std::string>(2));
 
-		SPprobINFO.TIME_info[stage][0] = col_name;
-		SPprobINFO.TIME_info[stage][1] = row_name;
+		SPprobINFO->TIME_info->at(stage)[0] = col_name;
+		SPprobINFO->TIME_info->at(stage)[1] = row_name;
 
 		stage++;							  
 	}
 
-	SPprobINFO.stage_num = stage;
+	SPprobINFO->stage_num = &stage;
 
 	TIMfileStream.close();
 }
@@ -180,7 +188,7 @@ void ProbPrep::read_TIM()
 //read STOC file
 void ProbPrep::read_STOC()
 {
-	std::string stoFileName = SPprobINFO.dirr_input + SPprobINFO.file_name + ".sto";
+	std::string stoFileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".sto";
 	std::ifstream stoFileStream;
 	stoFileStream.open(stoFileName.c_str());
 	if (stoFileStream.fail()) {
@@ -217,7 +225,7 @@ void ProbPrep::read_STOC()
 //read STOC file
 void ProbPrep::read_STOC_INDEP()
 {
-	std::string stoFileName = SPprobINFO.dirr_input + SPprobINFO.file_name + ".sto";
+	std::string stoFileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".sto";
 	std::ifstream stoFileStream;
 	stoFileStream.open(stoFileName.c_str());
 
@@ -234,7 +242,7 @@ void ProbPrep::read_STOC_INDEP()
 		
 		if (col1.compare("INDEP") == 0) // getting new scenarios
 		{
-			SPprobINFO.STOC_TYPE = "INDEPENDENT DISCRETE";
+			*SPprobINFO->STOC_TYPE = "INDEPENDENT DISCRETE";
 		}
 		else if (col3.compare("") != 0)
 		{
@@ -244,48 +252,48 @@ void ProbPrep::read_STOC_INDEP()
 			}
 			else if (flag == 1)
 			{
-				rv_empty.ColName = col1;
-				rv_empty.RowName = col2;
-				rv_empty.val.push_back(atof(col3.c_str()));
-				rv_empty.prob.push_back(atof(col4.c_str()));
+				rv_empty.ColName = &col1;
+				rv_empty.RowName = &col2;
+				rv_empty.val->push_back(atof(col3.c_str()));
+				rv_empty.prob->push_back(atof(col4.c_str()));
 				sum += atof(col4.c_str());
-				rv_empty.CDF.insert(std::make_pair(atof(col3.c_str()), sum));
+				rv_empty.CDF->insert(std::make_pair(atof(col3.c_str()), sum));
 				flag = INFINITY;
 			}
 			else if (col1.compare("*") == 0 || col1.compare("ENDATA") == 0)
 			{
-				SPprobINFO.rv_num++;
-				SPprobINFO.RVs.push_back(rv_empty);
-				rv_empty.val.clear();
-				rv_empty.prob.clear();
-				rv_empty.CDF.clear();
+				SPprobINFO->rv_num++;
+				SPprobINFO->RVs->push_back(rv_empty);
+				rv_empty.val->clear();
+				rv_empty.prob->clear();
+				rv_empty.CDF->clear();
 				sum = 0;
 			}
 			else
 			{
-				rv_empty.ColName = col1;
-				rv_empty.RowName = col2;
-				rv_empty.val.push_back(atof(col3.c_str()));
-				rv_empty.prob.push_back(atof(col4.c_str()));
+				rv_empty.ColName = &col1;
+				rv_empty.RowName = &col2;
+				rv_empty.val->push_back(atof(col3.c_str()));
+				rv_empty.prob->push_back(atof(col4.c_str()));
 				sum += atof(col4.c_str());
-				rv_empty.CDF.insert(std::make_pair(atof(col3.c_str()), sum));
+				rv_empty.CDF->insert(std::make_pair(atof(col3.c_str()), sum));
 			}
 		}
 
 
 		if (col1.compare("ENDATA") != 0) continue;
 
-		for (int rv = 0; rv < SPprobINFO.RVs.size(); rv++)
+		for (int rv = 0; rv < SPprobINFO->RVs->size(); rv++)
 		{
-			if (SPprobINFO.RVs[rv].ColName == "RHS")
+			if (*SPprobINFO->RVs->at(rv).ColName == "RHS")
 			{
-				SPprobINFO.RVs[rv].rv_col_num = 0;
-				for (int rg = 0; rg < solver.getSize(mean_prob.range_raw); rg++)
+				SPprobINFO->RVs->at(rv).rv_col_num = 0;
+				for (int rg = 0; rg < solver->getSize(*mean_prob->range_raw); rg++)
 				{
-					if ((std::string)solver.getName(mean_prob.range_raw[rg]) == SPprobINFO.RVs[rv].RowName)
+					if ((std::string)solver->getName(mean_prob->range_raw->operator[](rg)) == *SPprobINFO->RVs->at(rv).RowName)
 					{
-						SPprobINFO.RVs[rv].rv_row_num = rg;
-						SPprobINFO.RVs[rv].name = solver.getName(mean_prob.range_raw[rg]);
+						SPprobINFO->RVs->at(rv).rv_row_num = rg;
+						SPprobINFO->RVs->at(rv).name = solver->getName(mean_prob->range_raw->operator[](rg));
 					}//if range name is equal
 				}//for ranges
 			}//rv in RHS
@@ -307,23 +315,23 @@ void ProbPrep::read_STOC_INDEP()
 Prob ProbPrep::create_master_prob()
 {
 	Prob prob;
-	solver.open_prob(prob);
+	solver->open_prob(prob);
 
-	add_surrogate_master_vars(prob, solver);  //Add surrogate LShaped vars for defining lower bounding cuts
-	add_master_vars(prob, solver);            //separate master variables from mean prob and add to master_prob
+	add_surrogate_master_vars(prob, *solver);  //Add surrogate LShaped vars for defining lower bounding cuts
+	add_master_vars(prob, *solver);            //separate master variables from mean prob and add to master_prob
 	
-	prob.strType = "master";
+	*prob.strType = "master";
 
-	for (int v1 = 0; v1 < mean_prob.obj_coef_raw.size(); v1++)
+	for (int v1 = 0; v1 < mean_prob->obj_coef_raw->size(); v1++)
 	{
-		for (int v2 = 0; v2 < solver.getSize(prob.vars_raw); v2++)
+		for (int v2 = 0; v2 < solver->getSize(*prob.vars_raw); v2++)
 		{
-			if (mean_prob.obj_coef_raw[v1].col_name == solver.getName(prob.vars_raw[v2]))
+			if (mean_prob->obj_coef_raw->at(v1).col_name == solver->getName(prob.vars_raw->operator[](v2)))
 			{
 				Coeff_Sparse empt;
-				empt = mean_prob.obj_coef_raw[v1];
+				empt = mean_prob->obj_coef_raw->at(v1);
 				empt.col = v2;
-				prob.obj_coef_raw.push_back(empt);
+				prob.obj_coef_raw->push_back(empt);
 				break;
 			}
 		}
@@ -341,36 +349,37 @@ Prob ProbPrep::create_master_prob()
 		prob.isReg = false;
 	}
 
-	x_reg.resize(prob.vars_raw.getSize());
-	for (int i = 0; i < prob.vars_raw.getSize(); i++) x_reg[i].value = mean_prob.sol[i].value;
+	x_reg.resize(prob.vars_raw->getSize());
+	for (int i = 0; i < prob.vars_raw->getSize(); i++) x_reg[i].value = mean_prob->sol->at(i).value;
 
-	add_master_rngs(prob, solver);
-	add_master_obj(prob, solver);
+	add_master_rngs(prob, *solver);
+	add_master_obj(prob, *solver);
 
-	for (int i = SPprobINFO.TIME_row_idx[0]; i < SPprobINFO.TIME_row_idx[1]; i++)
+	for (int i = SPprobINFO->TIME_row_idx->at(0); i < SPprobINFO->TIME_row_idx->at(1); i++)
 	{
-		prob.rng_coefs_raw.push_back(mean_prob.rng_coefs_raw[i]);
+		prob.rng_coefs_raw->push_back(mean_prob->rng_coefs_raw->at(i));
 	}
 	
-	prob.model_name = SPprobINFO.dirr_model + SPprobINFO.output_model + 
-		                                    "master" + SPprobINFO.model_type;
+	prob.model_name = SPprobINFO->dirr_model + SPprobINFO->output_model + 
+		                                    "master" + SPprobINFO->model_type;
 	prob.name = prob.model_name.c_str();
 
 	prob.env->setDeleter(IloLinearDeleterMode);
 
-	solver.Create_Prob(prob);
+	solver->Create_Prob(prob);
 
 	if (print_lp_models == 1) print_master_prob(prob);
-	
-	prob.num_rng = solver.getSize(prob.range_raw);
-	prob.num_var = solver.getSize(prob.vars_raw);
-	prob.probType = solver.getProbtype(prob);
+	int s1 = solver->getSize(*prob.range_raw);
+	int s2 = solver->getSize(*prob.vars_raw);
+	prob.num_rng = &s1;
+	prob.num_var = &s2;
+	*prob.probType = solver->getProbtype(prob);
 	prob.random = false;
 	if (Regular_LShaped == 1) prob.isReg = true;
 
-	solver.Solve_Prob(prob, true);
+	solver->Solve_Prob(prob, true);
 	std::cout << "Empty Master Objective:  " << prob.zstar << std::endl;
-	std::cout << "Master Type:  " << solver.getProbtype(prob) << std::endl;
+	std::cout << "Master Type:  " << solver->getProbtype(prob) << std::endl;
 	//system("pause");
 
 	//Master problem does not have any cuts at this point
@@ -388,14 +397,14 @@ void ProbPrep::add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver)
 {
 	prob.has_surrogate = true;
 	
-	if (prob.surro_vars_raw.getSize() > 0)  prob.surro_vars_raw.clear();
+	if (prob.surro_vars_raw->getSize() > 0)  prob.surro_vars_raw->clear();
 
 	//first add surrogate variables
-	for (int s = 0; s < SPprobINFO.initial_scen_num; s++)
+	for (int s = 0; s < *SPprobINFO->initial_scen_num; s++)
 	{
 		char varname[20];
 		sprintf(varname, "\eta_%d", (int)(s+1));
-		solver.add_to_array(prob.surro_vars_raw, 
+		solver.add_to_array(*prob.surro_vars_raw, 
 			              solver.Create_Var_explicit(-IloInfinity, IloInfinity, 1, varname));
 	}
 
@@ -406,18 +415,18 @@ void ProbPrep::add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver)
 void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
 {
 	int stage_count = 0;
-	for (int v = 0; v < mean_prob.vars_raw.getSize(); v++)
+	for (int v = 0; v < mean_prob->vars_raw->getSize(); v++)
 	{
-		if (SPprobINFO.TIME_info[0][0] == (std::string)solver.getName(mean_prob.vars_raw[v]))
+		if (SPprobINFO->TIME_info->at(0)[0] == (std::string)solver.getName(mean_prob->vars_raw->operator[](v)))
 		{
-			SPprobINFO.TIME_col_idx.push_back(v);
-			solver.add_to_array(prob.vars_raw, mean_prob.vars_raw[v]);
+			SPprobINFO->TIME_col_idx->push_back(v);
+			solver.add_to_array(*prob.vars_raw, mean_prob->vars_raw->operator[](v));
 			stage_count++;
 		}
-		else if (SPprobINFO.TIME_info[stage_count][0] == (std::string)solver.getName(mean_prob.vars_raw[v]))
+		else if (SPprobINFO->TIME_info->at(stage_count)[0] == (std::string)solver.getName(mean_prob->vars_raw->operator[](v)))
 		{
-			SPprobINFO.TIME_col_idx.push_back(v);
-			if (SPprobINFO.TIME_info.size() == stage_count + 1)
+			SPprobINFO->TIME_col_idx->push_back(v);
+			if (SPprobINFO->TIME_info->size() == stage_count + 1)
 			{
 				break;
 			}
@@ -428,7 +437,7 @@ void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
 		}
 		else
 		{
-			solver.add_to_array(prob.vars_raw, mean_prob.vars_raw[v]);
+			solver.add_to_array(*prob.vars_raw, mean_prob->vars_raw->operator[](v));
 		}
 	}
 	//cout << " ----- master vars are added ----- " << endl;
@@ -437,24 +446,24 @@ void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
 void ProbPrep::add_master_rngs(Prob& prob, Solver_CPLEX& solver)
 {
 	int stage_count = 0;
-	if (SPprobINFO.TIME_info[0][1] == (std::string)solver.getName(mean_prob.obj_raw))
+	if (SPprobINFO->TIME_info->at(0)[1] == (std::string)solver.getName(*mean_prob->obj_raw))
 	{
 		stage_count++;
-		SPprobINFO.TIME_row_idx.push_back(0);
+		SPprobINFO->TIME_row_idx->push_back(0);
 	}
 
-	for (int r = 0; r < solver.getSize(mean_prob.range_raw); r++)
+	for (int r = 0; r < solver.getSize(*mean_prob->range_raw); r++)
 	{
-		if (SPprobINFO.TIME_info[0][1] == (std::string)solver.getName(mean_prob.range_raw[r]))
+		if (SPprobINFO->TIME_info->at(0)[1] == (std::string)solver.getName(mean_prob->range_raw->operator[](r)))
 		{
-			SPprobINFO.TIME_row_idx.push_back(r);
-			solver.add_to_array(prob.range_raw, mean_prob.range_raw[r]);
+			SPprobINFO->TIME_row_idx->push_back(r);
+			solver.add_to_array(*prob.range_raw, mean_prob->range_raw->operator[](r));
 			stage_count++;
 		}
-		else if(SPprobINFO.TIME_info[stage_count][1] == (std::string)solver.getName(mean_prob.range_raw[r]))
+		else if(SPprobINFO->TIME_info->at(stage_count)[1] == (std::string)solver.getName(mean_prob->range_raw->operator[](r)))
 		{
-			SPprobINFO.TIME_row_idx.push_back(r);
-			if (SPprobINFO.TIME_info.size() == stage_count + 1)
+			SPprobINFO->TIME_row_idx->push_back(r);
+			if (SPprobINFO->TIME_info->size() == stage_count + 1)
 			{
 				break;
 			}
@@ -465,10 +474,10 @@ void ProbPrep::add_master_rngs(Prob& prob, Solver_CPLEX& solver)
 		}
 		else
 		{
-			solver.add_to_array(prob.range_raw, mean_prob.range_raw[r]);
+			solver.add_to_array(*prob.range_raw, mean_prob->range_raw->operator[](r));
 		}
 	}
-	SPprobINFO.TIME_row_idx.push_back(solver.getSize(mean_prob.range_raw));
+	SPprobINFO->TIME_row_idx->push_back(solver.getSize(*mean_prob->range_raw));
 	//cout << " ----- master rngs are added ----- " << endl;
 }
 
@@ -476,32 +485,32 @@ void ProbPrep::add_master_obj(Prob& prob, Solver_CPLEX& solver)
 {
 	IloExpr empty_expr(*prob.env);
 
-	empty_expr = prob.surro_vars_raw[0];
+	empty_expr = prob.surro_vars_raw->operator[](0);
 
 	if (Multi_LShaped == 1)
 	{
-		for (int s = 1; s < prob.surro_vars_raw.getSize(); s++)
+		for (int s = 1; s < prob.surro_vars_raw->getSize(); s++)
 		{
-			empty_expr += prob.surro_vars_raw[s];
+			empty_expr += prob.surro_vars_raw->operator[](s);
 
 		}
 	}
 
-	double minVal = 1/(double)SPprobINFO.initial_scen_num;
+	double minVal = 1/(double)*SPprobINFO->initial_scen_num;
 
-	if (prob.obj_coef_raw.size() > 0)
+	if (prob.obj_coef_raw->size() > 0)
 	{
-		for (int v = 0; v < prob.obj_coef_raw.size(); v++)
+		for (int v = 0; v < prob.obj_coef_raw->size(); v++)
 		{
-			empty_expr += prob.obj_coef_raw[v].val * prob.vars_raw[prob.obj_coef_raw[v].col];
-			if (prob.obj_coef_raw[v].val < minVal) minVal = prob.obj_coef_raw[v].val;
+			empty_expr += prob.obj_coef_raw->at(v).val * prob.vars_raw->operator[](prob.obj_coef_raw->at(v).col);
+			if (prob.obj_coef_raw->at(v).val < minVal) minVal = prob.obj_coef_raw->at(v).val;
 		}
 	}
 	
 	//prob.model.add(empty_expr >= mean_prob.zstar);
 	if (Regular_LShaped == 1)
 	{
-		if (minVal == 1 / (double)SPprobINFO.initial_scen_num)
+		if (minVal == 1 / (double)*SPprobINFO->initial_scen_num)
 		{
 			prob.lambda = abs(minVal) / 50;
 			prob.sigma  = abs(minVal) / 100;
@@ -517,14 +526,14 @@ void ProbPrep::add_master_obj(Prob& prob, Solver_CPLEX& solver)
 	}
 	
 
-	prob.obj_raw = solver.Create_OBJ_explicit(mean_prob.obj_raw.getSense(), empty_expr, mean_prob.obj_raw.getName());
+	*prob.obj_raw = solver.Create_OBJ_explicit(mean_prob->obj_raw->getSense(), empty_expr, mean_prob->obj_raw->getName());
 	empty_expr.end();
 	//cout << " ----- master obj is added ----- " << endl;
 }
 
 void ProbPrep::print_master_prob(Prob& prob)
 {
-	solver.Print_Prob(prob);
+	solver->Print_Prob(prob);
 	//cout << " ----- master is printed ----- " << endl;
 }
 #pragma endregion creating the master problem
@@ -534,41 +543,42 @@ void ProbPrep::print_master_prob(Prob& prob)
 Prob ProbPrep::create_sub_probs(int stage)
 {
 	Prob prob;
-	solver.open_prob(prob);
-	prob.strType = "sub";
+	solver->open_prob(prob);
+	*prob.strType = "sub";
 	
 	int end;
-	if (SPprobINFO.TIME_col_idx.size() > stage + 1)
+	if (SPprobINFO->TIME_col_idx->size() > stage + 1)
 	{
-		end = SPprobINFO.TIME_col_idx[stage + 1];
+		end = SPprobINFO->TIME_col_idx->at(stage + 1);
 	}
 	else
 	{
-		end = solver.getSize(mean_prob.vars_raw);
+		end = solver->getSize(*mean_prob->vars_raw);
 	}
 
-	add_sub_vars(prob, solver, SPprobINFO.TIME_col_idx[stage], end);
+	add_sub_vars(prob, *solver, SPprobINFO->TIME_col_idx->at(stage), end);
 	//cout << " ----- sub_"<< stage <<" vars are added ----- " << endl;
-	add_sub_obj(prob, solver);
+	add_sub_obj(prob, *solver);
 	//cout << " ----- sub_" << stage << " obj is added ----- " << endl;
-	add_sub_rngs(prob, solver);
+	add_sub_rngs(prob, *solver);
 	//cout << " ----- sub_" << stage << " ranges are added ----- " << endl;
 
-	prob.model_name = SPprobINFO.dirr_model + SPprobINFO.output_model +
-		"sub" + std::to_string(stage) + SPprobINFO.model_type;
+	prob.model_name = SPprobINFO->dirr_model + SPprobINFO->output_model +
+		"sub" + std::to_string(stage) + SPprobINFO->model_type;
 
-	solver.Create_Prob(prob);
+	solver->Create_Prob(prob);
 	prob.isReg = false;
 
 	if (print_lp_models == 1) print_sub_prob(prob, stage);
 	//cout << " ----- sub_" << stage << " is printed ----- " << endl;
-
-	prob.num_rng = solver.getSize(prob.range_raw);
-	prob.num_var = solver.getSize(prob.vars_raw);
-	prob.probType = solver.getProbtype(prob);
+	int n1 = solver->getSize(*prob.range_raw);
+	int n2 = solver->getSize(*prob.vars_raw);
+	prob.num_rng = &n1;
+	prob.num_var = &n2;
+	*prob.probType = solver->getProbtype(prob);
 	prob.random = true;
 
-	fill_out_rhs(prob, solver);
+	fill_out_rhs(prob, *solver);
 
 	prob.opt = false;
 	prob.feas = false;
@@ -583,7 +593,7 @@ void ProbPrep::add_sub_vars(Prob& prob, Solver_CPLEX& solver, int start, int end
 {
 	for (int i = start; i < end; i++)
 	{
-		solver.add_to_array(prob.vars_raw, mean_prob.vars_raw[i]);
+		solver.add_to_array(*prob.vars_raw, mean_prob->vars_raw->operator[](i));
 	}
 }
 
@@ -592,23 +602,23 @@ void ProbPrep::add_sub_rngs(Prob& prob, Solver_CPLEX& solver)
 	//cout << SPprobINFO.TIME_row_idx[0] << " " << SPprobINFO.TIME_row_idx[1]
 	//	<< " " << SPprobINFO.TIME_row_idx[2] << endl;
 
-	solver.decompose_range(mean_prob.range_raw, prob, prob.vars_raw, 
-		                   SPprobINFO.TIME_row_idx[1], SPprobINFO.TIME_row_idx[2]);
+	solver.decompose_range(*mean_prob->range_raw, prob, *prob.vars_raw, 
+		                   SPprobINFO->TIME_row_idx->at(1), SPprobINFO->TIME_row_idx->at(2));
 }
 
 void ProbPrep::add_sub_obj(Prob& prob, Solver_CPLEX& solver)
 {
 	
-	for (int v = 0; v < mean_prob.obj_coef_raw.size(); v++)
+	for (int v = 0; v < mean_prob->obj_coef_raw->size(); v++)
 	{
-		for (int v2 = 0; v2 < solver.getSize(prob.vars_raw); v2++)
+		for (int v2 = 0; v2 < solver.getSize(*prob.vars_raw); v2++)
 		{
-			if (mean_prob.obj_coef_raw[v].col_name == solver.getName(prob.vars_raw[v2]))
+			if (mean_prob->obj_coef_raw->at(v).col_name == solver.getName(prob.vars_raw->operator[](v2)))
 			{
 				Coeff_Sparse empt;
-				empt = mean_prob.obj_coef_raw[v];
+				empt = mean_prob->obj_coef_raw->at(v);
 				empt.col = v2;
-				prob.obj_coef_raw.push_back(empt);
+				prob.obj_coef_raw->push_back(empt);
 				break;
 			}
 		}
@@ -616,44 +626,44 @@ void ProbPrep::add_sub_obj(Prob& prob, Solver_CPLEX& solver)
 	
 	IloExpr empt_expr(*prob.env);
 
-	if (prob.obj_coef_raw.size() > 0)
+	if (prob.obj_coef_raw->size() > 0)
 	{
-		for (int i = 0; i < prob.obj_coef_raw.size(); i++)
+		for (int i = 0; i < prob.obj_coef_raw->size(); i++)
 		{
-			empt_expr += prob.obj_coef_raw[i].val * prob.vars_raw[prob.obj_coef_raw[i].col];
+			empt_expr += prob.obj_coef_raw->at(i).val * prob.vars_raw->operator[](prob.obj_coef_raw->at(i).col);
 		}
 	}
 
-	prob.obj_raw = solver.Create_OBJ_explicit(mean_prob.obj_raw.getSense(), empt_expr, mean_prob.obj_raw.getName());
+	*prob.obj_raw = solver.Create_OBJ_explicit(mean_prob->obj_raw->getSense(), empt_expr, mean_prob->obj_raw->getName());
 
 }
 
 void ProbPrep::print_sub_prob(Prob& prob, int stage)
 {
-	solver.Print_Prob(prob);
+	solver->Print_Prob(prob);
 }
 
 void ProbPrep::fill_out_rhs(Prob& prob, Solver_CPLEX& solver)
 {
-	for (int r = 0; r < prob.num_rng; r++)
+	for (int r = 0; r < *prob.num_rng; r++)
 	{
 		SOL_str empt;
-		empt.row = solver.getName(prob.range_raw[r]);
+		empt.row = solver.getName(prob.range_raw->operator[](r));
 		empt.row_num = r;
-		empt.value = solver.get_rhs(prob.range_raw[r]);
+		empt.value = solver.get_rhs(prob.range_raw->operator[](r));
 		empt.isRandom = false;
 		empt.randomVar_indx = -1;
-		prob.rhs.push_back(empt);
+		prob.rhs->push_back(empt);
 	}
 
-	for (int rv = 0; rv < SPprobINFO.RVs.size(); rv++)
+	for (int rv = 0; rv < SPprobINFO->RVs->size(); rv++)
 	{
-		for (int r = 0; r < prob.num_rng; r++)
+		for (int r = 0; r < *prob.num_rng; r++)
 		{
-			if (SPprobINFO.RVs[rv].RowName == (std::string)prob.rhs[r].row)
+			if (*SPprobINFO->RVs->at(rv).RowName == (std::string)prob.rhs->at(r).row)
 			{
-				prob.rhs[r].isRandom = true;
-				prob.rhs[r].randomVar_indx = rv;
+				prob.rhs->at(r).isRandom = true;
+				prob.rhs->at(r).randomVar_indx = rv;
 				break;
 			}
 		}
@@ -661,13 +671,13 @@ void ProbPrep::fill_out_rhs(Prob& prob, Solver_CPLEX& solver)
 
 	if (sub_rhs_print == 1)
 	{
-		for (int r = 0; r < prob.num_rng; r++)
+		for (int r = 0; r < *prob.num_rng; r++)
 		{
-			std::cout << prob.rhs[r].row << " ";
-			std::cout << prob.rhs[r].row_num << " ";
-			std::cout << prob.rhs[r].isRandom << " ";
-			std::cout << prob.rhs[r].randomVar_indx << " ";
-			std::cout << prob.rhs[r].value << std::endl;
+			std::cout << prob.rhs->at(r).row << " ";
+			std::cout << prob.rhs->at(r).row_num << " ";
+			std::cout << prob.rhs->at(r).isRandom << " ";
+			std::cout << prob.rhs->at(r).randomVar_indx << " ";
+			std::cout << prob.rhs->at(r).value << std::endl;
 		}
 	}
 }

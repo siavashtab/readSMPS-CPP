@@ -32,7 +32,7 @@ IloNum Sampling::RV_Gen(RV_info& rv, std::mt19937& randgen, vec_d& zero_one_l, b
 	std::map<double, double>::iterator it;
 
 	//map<val, cumulative sum>
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		if (rnd <= it->second)
 		{
@@ -116,7 +116,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val)
 
 	std::map<double, double>::iterator it;
 
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		if (val[0] <= it->first)
 		{
@@ -129,7 +129,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val)
 		}
 	}
 
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		if (val[1] >= it->first)
 		{			
@@ -174,7 +174,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val, double& lower, double& uppe
 		}
 		else
 		{
-			for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+			for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 			{
 				if (val[0] >= it->first)
 				{
@@ -194,7 +194,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val, double& lower, double& uppe
 	}
 	else
 	{
-		for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+		for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 		{
 			if (val[0] >= it->first)
 			{
@@ -208,7 +208,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val, double& lower, double& uppe
 
 		}
 
-		for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+		for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 		{
 			if (val[1] >= it->first)
 			{
@@ -239,7 +239,7 @@ double Sampling::rev_zero_one_d(RV_info& rv, double val)
 
 	std::map<double, double>::iterator it;
 
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		if (val > it->first)
 		{
@@ -267,7 +267,7 @@ IloNum Sampling::RV_Gen_EVAL(RV_info& rv, std::mt19937& randgen)
 	//cout << rnd << "," << endl;
 
 	//map<val, cumulative sum>
-	for (std::map<double, double>::iterator it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (std::map<double, double>::iterator it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		//cout << it->second << ",";
 		if (rnd <= it->second)
@@ -279,7 +279,7 @@ IloNum Sampling::RV_Gen_EVAL(RV_info& rv, std::mt19937& randgen)
 
 	printf("=");
 
-	std::map<double, double>::iterator it = rv.CDF.end();
+	std::map<double, double>::iterator it = rv.CDF->end();
 	return (IloNum)it->first;
 	//cout << endl;
 }
@@ -295,7 +295,7 @@ std::tuple<IloNum, double> Sampling::RV_Gen_PE(RV_info& rv, std::mt19937& randge
 	std::map<double, double>::iterator it;
 
 	//map<val, cumulative sum>
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		
 		if (rnd <= it->second)
@@ -433,7 +433,7 @@ vec_d Sampling::real_in_range(RV_info& rv, vec_d& range)
 	}
 
 	//map<val, cumulative sum>
-	for (it = rv.CDF.begin(); it != rv.CDF.end(); ++it)
+	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 
 		if (range[0] <= it->first && range[1] >= it->first)

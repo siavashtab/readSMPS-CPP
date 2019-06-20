@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-double L2_norm(std::vector<IloNum>& u)
+double utils::L2_norm(const std::vector<IloNum>& u)
 {
 	double accum = 0.;
 	for (int i = 0; i < u.size(); ++i) 
@@ -16,7 +16,7 @@ double L2_norm(std::vector<IloNum>& u)
 	return norm;
 }
 
-double L2_norm_double(std::vector<double>& u)
+double utils::L2_norm(const std::vector<double>& u)
 {
 	double accum = 0.;
 	for (int i = 0; i < u.size(); ++i) {
@@ -26,20 +26,9 @@ double L2_norm_double(std::vector<double>& u)
 	return norm;
 }
 
-double L2_norm_double_pos(std::vector<double>& u)
-{
-	double accum = 0.;
-	for (int i = 0; i < u.size(); ++i) {
-		if (u[i] > 0){
-			accum += u[i] * u[i];
-		}		
-	}
-	double norm = sqrt(accum);
-	return norm;
-}
 
 //Function for average
-double avg_func(std::vector<double>& vv)
+double utils::avg_func(const std::vector<double>& vv)
 {
 	double return_value = 0.0;
 	int n = vv.size();
@@ -70,7 +59,7 @@ bool falls_in_range(vec2_d& range, vec_d& val)
 }
 
 //Function for variance
-double variance_func(std::vector<double>& vec)
+double utils::variance_func(const std::vector<double>& vec)
 {
 
 	double mean = avg_func(vec);
@@ -89,7 +78,7 @@ double variance_func(std::vector<double>& vec)
 //****************End of variance funtion****************
 
 //Function for variance
-double variance_func_i(std::vector<int>& vec)
+double utils::variance_func(const std::vector<int>& vec)
 {
 
 	int summ = accumulate(vec.begin(), vec.end(),0);
@@ -110,7 +99,7 @@ double variance_func_i(std::vector<int>& vec)
 
 // check if it is in a vector function
 
-bool inVector(std::vector<double>& vec, double& tmp)
+bool utils::inVector(const std::vector<double>& vec, const double& tmp)
 {
 
 	bool isInV;
@@ -126,12 +115,12 @@ bool inVector(std::vector<double>& vec, double& tmp)
 
 // check if it is in a vector 2d function
 
-bool inVector2d(vec2_d& vec, vec_d& tmp)
+bool utils::inVector(const vec2_d& vec, const vec_d& tmp)
 {
 
 	bool isInV = false;
 
-	for (vec2_d::iterator it = vec.begin(); it != vec.end(); it++) {
+	for (vec2_d::const_iterator it = vec.begin(); it != vec.end(); it++) {
 		if (*it == tmp) 
 		{
 		   isInV = true;
@@ -140,14 +129,13 @@ bool inVector2d(vec2_d& vec, vec_d& tmp)
 
 	return isInV;
 
-
 }
 
 //****************End of check if it is in a vector 2d funtion****************
 
 // check if it is in a vector 2Num function
 
-bool inVector2Num(std::vector<std::vector<IloNum>>& vec, std::vector<IloNum>& tmp)
+bool utils::inVector(const std::vector<std::vector<IloNum>>& vec, const std::vector<IloNum>& tmp)
 {
 
 	bool isInV;
@@ -156,20 +144,19 @@ bool inVector2Num(std::vector<std::vector<IloNum>>& vec, std::vector<IloNum>& tm
 
 	return isInV;
 
-
 }
 
 //****************End of check if it is in a vector 2Num funtion****************
 
 // check if it is in a 2vector function
 
-bool in2Vector(vec2_d& vec, vec_d& tmp, int& pos)
+bool utils::inVector(const vec2_d& vec, const vec_d& tmp, int& pos)
 {
 
 
 	bool isInV = false;
 
-	for (vec2_d::iterator it = vec.begin(); it != vec.end(); it++) {
+	for (vec2_d::const_iterator it = vec.begin(); it != vec.end(); it++) {
 		if (*it == tmp)
 		{
 			isInV = true;
@@ -187,7 +174,7 @@ bool in2Vector(vec2_d& vec, vec_d& tmp, int& pos)
 
 // check if it is in a vector function
 
-bool in_intVector(std::vector<int>& vec, int& tmp)
+bool utils::inVector(const std::vector<int>& vec, const int& tmp)
 {
 
 	bool isInV;
@@ -202,10 +189,10 @@ bool in_intVector(std::vector<int>& vec, int& tmp)
 //****************End of check if it is in a vector funtion****************
 
 // find the position of a tmp in a vector
-int findVector(std::vector<double>& vec, double& tmp)
+int utils::findVector(const std::vector<double>& vec, const double& tmp)
 {
 
-	std::vector<double>::iterator locc;
+	std::vector<double>::const_iterator locc;
 	locc = std::find(vec.begin(), vec.end(), tmp);
 	int loc = distance(vec.begin(), locc);
 
@@ -214,9 +201,9 @@ int findVector(std::vector<double>& vec, double& tmp)
 }
 //****************End of find the position of a tmp in a vector funtion****************
 
-int findVector2(vec2_d& vec, vec_d& tmp)
+int utils::findVector(const vec2_d& vec, const vec_d& tmp)
 {
-	vec2_d::iterator locc;
+	vec2_d::const_iterator locc;
 	locc = std::find(vec.begin(), vec.end(), tmp);
 	int loc = distance(vec.begin(), locc);
 

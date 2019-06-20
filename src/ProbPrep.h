@@ -5,8 +5,11 @@
 ** This file contains the routines needed to read SMPS format files
 **
 **
+**
+**
+**
 ** History:
-**   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
+**   March 2019 - Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
 **
 \******************************************************************************************/
 
@@ -27,19 +30,19 @@ public:
 	ProbPrep();
 	~ProbPrep();
 
-	SPProb_INFO SPprobINFO;
+	SPProb_INFO * SPprobINFO;
 
 	void initialize(std::string filename, int scen_num);
 	void Probs_from_SMPS();     //create Probs by reading SMPS files
 
-	Solver_CPLEX solver;    //vector of solvers - everytime we need a solver we can create one
+	Solver_CPLEX * solver;    //vector of solvers - everytime we need a solver we can create one
 
 	//Mean Prob INFOS
-	Prob mean_prob;
+	Prob * mean_prob;
 	//***********************************************************
 
 	//Created Master Probs
-	Prob master_prob;
+	Prob * master_prob;
 	std::vector<SOL_str> x_reg;
 	void         add_master_obj(Prob& prob, Solver_CPLEX& solver);
 	void         add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver);
@@ -48,7 +51,7 @@ public:
 	//Prob ph_sub_prob; 
 
 	//Created Sub Probs
-	std::vector<Prob> stage_sub_prob;
+	std::vector<Prob> * stage_sub_prob;
 	//***********************************************************
 
 
