@@ -7,9 +7,12 @@ ProbPrep::ProbPrep()
 {
 	printHeader();
 	SPprobINFO  = new SPProb_INFO();
+	newSPparam();
 	solver      = new Solver_CPLEX();
 	master_prob = new Prob();
+	newProb(*master_prob);
 	mean_prob   = new Prob();
+	newProb(*mean_prob);
 }
 
 ProbPrep::~ProbPrep()
@@ -19,6 +22,56 @@ ProbPrep::~ProbPrep()
 	delete master_prob;
 	delete mean_prob;
 	delete stage_sub_prob;
+	delete SPprobINFO;
+}
+
+void ProbPrep::newRV(RV_info &rv)
+{
+	rv.CDF = new std::map<double, double>;
+	rv.ColName = new std::string;
+	rv.id = new std::string;
+	rv.prob = new vec_d;
+	rv.RowName = new std::string;
+	rv.val = new vec_d;
+}
+
+void ProbPrep::newSPparam()
+{
+	SPprobINFO->RVs = new std::vector<RV_info>;
+	SPprobINFO->STOC_TYPE = new std::string;
+	SPprobINFO->TIME_col_idx = new vec_i;
+	SPprobINFO->TIME_info = new std::vector<std::vector<std::string>>;
+	SPprobINFO->TIME_row_idx = new vec_i;
+}
+
+void ProbPrep::newProb(Prob &tmpProb)
+{
+	tmpProb.beta = new vec2_d;
+	tmpProb.beta_sum = new vec_d;
+	tmpProb.Cx = new vec_d;
+	tmpProb.duals = new std::vector<SOL_str>;
+	tmpProb.dual_R = new vec_d;
+	tmpProb.dual_tot = new vec_d;
+	//tmpProb.feas_cut_duals = new std::vector<SOL_str>;
+	tmpProb.id = new std::string;
+	//tmpProb.LShaped_feas = new IloRangeArray;
+	//tmpProb.master_cuts = new IloRangeArray;
+	tmpProb.obj_coef_raw = new std::vector<Coeff_Sparse>;
+	//tmpProb.opt_cut_duals = new std::vector<SOL_str>;
+	//tmpProb.other_cuts = new std::vector<IloRange>;
+	tmpProb.prev_rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
+	tmpProb.probType = new std::string;
+	tmpProb.rho = new vec_d;
+	tmpProb.rhs = new std::vector<SOL_str>;
+	tmpProb.rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
+	//tmpProb.R_vars_raw = new IloNumVarArray;
+	tmpProb.r_w = new vec_d;
+	tmpProb.sol = new std::vector<SOL_str>;
+	tmpProb.sol_R = new std::vector<SOL_str>;
+	tmpProb.sol_surrogate = new std::vector<SOL_str>;
+	tmpProb.strType = new std::string;
+	tmpProb.surro_idx = new vec2_i;
+	tmpProb.xhat = new std::vector<SOL_str>;
 }
 
 void ProbPrep::initialize(std::string filename, int scen_num)
@@ -122,7 +175,6 @@ void ProbPrep::read_COR()
 	std::string CORfileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".cor";
 	std::cout << "looking for: " << CORfileName << std::endl;
 	mean_prob->name = CORfileName.c_str();
-	mean_prob->strType = new std::string;
 	*mean_prob->strType = "mean";
 	solver->open_prob(*mean_prob);
 	solver->ImportModel(*mean_prob);

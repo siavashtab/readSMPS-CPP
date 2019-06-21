@@ -93,7 +93,6 @@ void Solver_CPLEX::Create_OBJ(OBJ_struct& obj)
 
 void Solver_CPLEX::get_Linear_obj_coeffs(Prob& prob)
 {
-	prob.obj_coef_raw = new std::vector<Coeff_Sparse>;
 	//Get OBJ coefficients
 	for (IloExpr::LinearIterator it = IloExpr(prob.obj_raw->getExpr()).getLinearIterator(); it.ok(); ++it) {
 		Coeff_Sparse empty_coeff;
@@ -108,7 +107,6 @@ void Solver_CPLEX::get_Linear_obj_coeffs(Prob& prob)
 
 void Solver_CPLEX::get_Linear_rng_coeffs(Prob& prob)
 {
-	prob.rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
 	//Get RNG coefficients
 	prob.rng_coefs_raw->resize(prob.range_raw->getSize());
 	for (int r = 0; r < prob.range_raw->getSize(); r++)
