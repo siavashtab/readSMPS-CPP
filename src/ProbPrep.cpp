@@ -26,7 +26,7 @@ void ProbPrep::initialize(std::string filename, int scen_num)
 	
 	SPprobINFO->file_name = filename;
 	SPprobINFO->initial_scen_num = &scen_num;
-
+	
 	if (Algorithm == 0)
 	{
 		SPprobINFO->algorithm = "LShaped";
@@ -65,9 +65,9 @@ void ProbPrep::initialize(std::string filename, int scen_num)
 	if (Multi_LShaped == 1) {
 		SPprobINFO->output_saa += "mult_";
 	}
-
+	
 	Probs_from_SMPS();
-
+	
 	if (Algorithm == 0)
 	{
 		*master_prob = create_master_prob();
@@ -112,24 +112,27 @@ void ProbPrep::Probs_from_SMPS()
 	read_COR();
 	read_TIM();
 	read_STOC();
+	std::cout << "h" << std::endl;
 }
 
 void ProbPrep::read_COR()
 {
 	solver->open_solver();
-
+	
 	std::string CORfileName = SPprobINFO->dirr_input + SPprobINFO->file_name + ".cor";
 	std::cout << "looking for: " << CORfileName << std::endl;
 	mean_prob->name = CORfileName.c_str();
+	mean_prob->strType = new std::string;
 	*mean_prob->strType = "mean";
 	solver->open_prob(*mean_prob);
 	solver->ImportModel(*mean_prob);
+	
 	if (false) printf(" ** flag ** \n");
 	if (show_meanprob == 1) std::cout << mean_prob->model << std::endl;
-
+	
 	solver->get_Linear_obj_coeffs(*mean_prob);
 	solver->get_Linear_rng_coeffs(*mean_prob);
-
+	
 	SPprobINFO->num_var = mean_prob->num_var;
 	SPprobINFO->num_rngs = mean_prob->num_rng;
 
@@ -139,7 +142,7 @@ void ProbPrep::read_COR()
 	mean_prob->isReg = false;
 	solver->Create_Prob(*mean_prob);
 	solver->Solve_Prob(*mean_prob, false);
-
+	
 	
 	mean_prob->model_name = SPprobINFO->dirr_model + SPprobINFO->output_model +
 		"mean" + SPprobINFO->model_type;

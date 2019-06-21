@@ -10,18 +10,19 @@ void Solver_CPLEX::open_solver()
 void Solver_CPLEX::end_solver()
 {
 	env.end();
+	delete &env;
 }
 
 void Solver_CPLEX::open_prob(Prob& prob)
 {
 	prob.env = &env;
-	prob.model = &IloModel(*prob.env);
-	prob.cplex = &IloCplex(*prob.env);
-	prob.obj_raw = &IloObjective(*prob.env);
-	prob.vars_raw = &IloNumVarArray(*prob.env);
-	prob.surro_vars_raw = &IloNumVarArray(*prob.env);
-	prob.R_vars_raw = &IloNumVarArray(*prob.env);
-	prob.range_raw = &IloRangeArray(*prob.env);
+	prob.model = new IloModel(*prob.env);
+	prob.cplex = new IloCplex(*prob.env);
+	prob.obj_raw = new IloObjective(*prob.env);
+	prob.vars_raw = new IloNumVarArray(*prob.env);
+	prob.surro_vars_raw = new IloNumVarArray(*prob.env);
+	prob.R_vars_raw = new IloNumVarArray(*prob.env);
+	prob.range_raw = new IloRangeArray(*prob.env);
 }
 
 void Solver_CPLEX::Clear_Prob(Prob& prob, std::string type)
@@ -92,6 +93,7 @@ void Solver_CPLEX::Create_OBJ(OBJ_struct& obj)
 
 void Solver_CPLEX::get_Linear_obj_coeffs(Prob& prob)
 {
+	prob.obj_coef_raw = new std::vector<Coeff_Sparse>;
 	//Get OBJ coefficients
 	for (IloExpr::LinearIterator it = IloExpr(prob.obj_raw->getExpr()).getLinearIterator(); it.ok(); ++it) {
 		Coeff_Sparse empty_coeff;
@@ -102,12 +104,12 @@ void Solver_CPLEX::get_Linear_obj_coeffs(Prob& prob)
 		empty_coeff.val = it.getCoef();
 		prob.obj_coef_raw->push_back(empty_coeff);
 	}
-
 }
 
 void Solver_CPLEX::get_Linear_rng_coeffs(Prob& prob)
 {
-	 //Get RNG coefficients
+	prob.rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
+	//Get RNG coefficients
 	prob.rng_coefs_raw->resize(prob.range_raw->getSize());
 	for (int r = 0; r < prob.range_raw->getSize(); r++)
 	{
@@ -216,6 +218,7 @@ void Solver_CPLEX::ImportModel(Prob& prob)
 	try {
 		prob.cplex->importModel(*prob.model, prob.name, *prob.obj_raw, *prob.vars_raw, *prob.range_raw);
 		prob.isRaw = true; //the model is not distributed in detailed structs, rather in raw structs
+		prob.probType = new std::string;
 		*prob.probType = getProbtype(prob);
 		int n1 = prob.vars_raw->getSize();
 		int n2 = prob.range_raw->getSize();

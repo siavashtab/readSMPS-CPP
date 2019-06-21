@@ -5,16 +5,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-double utils::L2_norm(const std::vector<IloNum>& u)
-{
-	double accum = 0.;
-	for (int i = 0; i < u.size(); ++i) 
-	{
-		accum += u[i] * u[i];
-	}
-	double norm = sqrt(accum);
-	return norm;
-}
 
 double utils::L2_norm(const std::vector<double>& u)
 {
@@ -133,18 +123,6 @@ bool utils::inVector(const vec2_d& vec, const vec_d& tmp)
 
 //****************End of check if it is in a vector 2d funtion****************
 
-// check if it is in a vector 2Num function
-
-bool utils::inVector(const std::vector<std::vector<IloNum>>& vec, const std::vector<IloNum>& tmp)
-{
-
-	bool isInV;
-
-	isInV = (std::find(vec.begin(), vec.end(), tmp) != vec.end());
-
-	return isInV;
-
-}
 
 //****************End of check if it is in a vector 2Num funtion****************
 
@@ -244,7 +222,7 @@ std::vector<int> maxVector_num(std::vector<double> vec, int num)
 	std::vector<int> result;
 	sort(tmp.begin(), tmp.end());
 	for (int i = N - 1; i > N - num - 1; i--){
-		int loc = findVector(vec, tmp[i]);
+		int loc = utils::findVector(vec, tmp[i]);
 		result.push_back(loc);
 	}
 
@@ -262,7 +240,7 @@ std::vector<int> minVector_num(std::vector<double> vec, int num)
 	std::vector<int> result;
 	sort(tmp.begin(), tmp.end());
 	for (int l = 0; l < num; l++){
-		int loc = findVector(vec, tmp[l]);
+		int loc = utils::findVector(vec, tmp[l]);
 		result.push_back(loc);
 	}
 
@@ -282,7 +260,7 @@ std::vector<int> meanVector_num(std::vector<double> vec, int num)
 	int uu = round(N / 2) + floor(num / 2) + 1;
 
 	for (int l = ll; l < uu; l++){
-		int loc = findVector(vec, tmp[l]);
+		int loc = utils::findVector(vec, tmp[l]);
 		result.push_back(loc);
 	}
 
@@ -410,7 +388,7 @@ double mean_vec_d(std::vector<double>& v)
 /// STD VEctor
 double std_vec_d(std::vector<double>& v)
 {
-	double stdes = std::sqrt(variance_func(v));
+	double stdes = std::sqrt(utils::variance_func(v));
 	return stdes;
 }
 
@@ -420,7 +398,7 @@ double std_vec_d(vec2_d& v)
 	
 	for (int i = 0; i < v.size(); i++)
 	{
-		stdes += std::sqrt(variance_func(v[i]));
+		stdes += std::sqrt(utils::variance_func(v[i]));
 	}
 
 	stdes = stdes / v.size();
@@ -433,7 +411,7 @@ double std_vec_d(vec2_d& v)
 /// STD VEctor
 double std_vec_i(std::vector<int>& v)
 {
-	double stdes = std::sqrt(variance_func_i(v));
+	double stdes = std::sqrt(utils::variance_func(v));
 	return stdes;
 }
 
