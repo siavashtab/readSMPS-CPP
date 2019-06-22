@@ -10,7 +10,6 @@ ProbPrep::ProbPrep()
 	newSPparam();
 	solver      = new Solver_CPLEX();
 	master_prob = new Prob();
-	newProb(*master_prob);
 	mean_prob   = new Prob();
 	newProb(*mean_prob);
 }
@@ -52,6 +51,7 @@ void ProbPrep::newProb(Prob &tmpProb)
 	tmpProb.duals = new std::vector<SOL_str>;
 	tmpProb.dual_R = new vec_d;
 	tmpProb.dual_tot = new vec_d;
+	tmpProb.strType = new std::string;
 	//tmpProb.feas_cut_duals = new std::vector<SOL_str>;
 	tmpProb.id = new std::string;
 	//tmpProb.LShaped_feas = new IloRangeArray;
@@ -60,6 +60,7 @@ void ProbPrep::newProb(Prob &tmpProb)
 	//tmpProb.opt_cut_duals = new std::vector<SOL_str>;
 	//tmpProb.other_cuts = new std::vector<IloRange>;
 	tmpProb.prev_rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
+	tmpProb.prev_vars_raw = new std::vector<IloNumVarArray>;
 	tmpProb.probType = new std::string;
 	tmpProb.rho = new vec_d;
 	tmpProb.rhs = new std::vector<SOL_str>;
@@ -124,6 +125,7 @@ void ProbPrep::initialize(std::string filename, int scen_num)
 	if (Algorithm == 0)
 	{
 		*master_prob = create_master_prob();
+		
 		for (int st = 1; st < *SPprobINFO->stage_num; st++)
 		{
 			stage_sub_prob->push_back(create_sub_probs(st));
@@ -165,7 +167,6 @@ void ProbPrep::Probs_from_SMPS()
 	read_COR();
 	read_TIM();
 	read_STOC();
-	std::cout << "h" << std::endl;
 }
 
 void ProbPrep::read_COR()
@@ -287,8 +288,9 @@ void ProbPrep::read_STOC_INDEP()
 	std::string col1, col2, col3, col4;
 	int flag = 0;
 	RV_info rv_empty;
+	newRV(rv_empty);
 	double sum = 0;
-
+	
 	while (!safeGetline(stoFileStream, col1).eof())
 	{
 
@@ -307,8 +309,8 @@ void ProbPrep::read_STOC_INDEP()
 			}
 			else if (flag == 1)
 			{
-				rv_empty.ColName = &col1;
-				rv_empty.RowName = &col2;
+				*rv_empty.ColName = col1;
+				*rv_empty.RowName = col2;
 				rv_empty.val->push_back(atof(col3.c_str()));
 				rv_empty.prob->push_back(atof(col4.c_str()));
 				sum += atof(col4.c_str());
@@ -326,8 +328,8 @@ void ProbPrep::read_STOC_INDEP()
 			}
 			else
 			{
-				rv_empty.ColName = &col1;
-				rv_empty.RowName = &col2;
+				*rv_empty.ColName = col1;
+				*rv_empty.RowName = col2;
 				rv_empty.val->push_back(atof(col3.c_str()));
 				rv_empty.prob->push_back(atof(col4.c_str()));
 				sum += atof(col4.c_str());
@@ -354,7 +356,8 @@ void ProbPrep::read_STOC_INDEP()
 			}//rv in RHS
 			else
 			{
-				std::cout << "              ERROR: RV is not in RHS" << std::endl;
+				printf("              ERROR: RV is not in RHS    \n");
+				std::cout << *SPprobINFO->RVs->at(rv).ColName << std::endl;
 			}//rv is not in RHS
 		}//for all rvs
 
@@ -370,13 +373,15 @@ void ProbPrep::read_STOC_INDEP()
 Prob ProbPrep::create_master_prob()
 {
 	Prob prob;
-	solver->open_prob(prob);
+	newProb(prob);
 
+	solver->open_prob(prob);
+	
 	add_surrogate_master_vars(prob, *solver);  //Add surrogate LShaped vars for defining lower bounding cuts
 	add_master_vars(prob, *solver);            //separate master variables from mean prob and add to master_prob
 	
 	*prob.strType = "master";
-
+	
 	for (int v1 = 0; v1 < mean_prob->obj_coef_raw->size(); v1++)
 	{
 		for (int v2 = 0; v2 < solver->getSize(*prob.vars_raw); v2++)
@@ -391,7 +396,7 @@ Prob ProbPrep::create_master_prob()
 			}
 		}
 	}
-
+	
 	if (Regular_LShaped == 1)
 	{
 		prob.lambda = 0.0;
@@ -435,7 +440,7 @@ Prob ProbPrep::create_master_prob()
 	solver->Solve_Prob(prob, true);
 	std::cout << "Empty Master Objective:  " << prob.zstar << std::endl;
 	std::cout << "Master Type:  " << solver->getProbtype(prob) << std::endl;
-	//system("pause");
+
 
 	//Master problem does not have any cuts at this point
 	prob.opt = false;
@@ -453,6 +458,7 @@ void ProbPrep::add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver)
 	prob.has_surrogate = true;
 	
 	if (prob.surro_vars_raw->getSize() > 0)  prob.surro_vars_raw->clear();
+	prob.surro_vars_raw = new IloNumVarArray(*prob.env);
 
 	//first add surrogate variables
 	for (int s = 0; s < *SPprobINFO->initial_scen_num; s++)
@@ -463,8 +469,8 @@ void ProbPrep::add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver)
 			              solver.Create_Var_explicit(-IloInfinity, IloInfinity, 1, varname));
 	}
 
-
-	//cout << " ----- Surrogate vars are added ----- " << endl;
+	
+	std::cout << " ----- Surrogate vars are added ----- " << std::endl;
 }
 
 void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
@@ -495,7 +501,8 @@ void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
 			solver.add_to_array(*prob.vars_raw, mean_prob->vars_raw->operator[](v));
 		}
 	}
-	//cout << " ----- master vars are added ----- " << endl;
+	
+	std::cout << " ----- master vars are added ----- " << std::endl;
 }
 
 void ProbPrep::add_master_rngs(Prob& prob, Solver_CPLEX& solver)
@@ -598,6 +605,8 @@ void ProbPrep::print_master_prob(Prob& prob)
 Prob ProbPrep::create_sub_probs(int stage)
 {
 	Prob prob;
+	newProb(prob);
+
 	solver->open_prob(prob);
 	*prob.strType = "sub";
 	
@@ -612,11 +621,11 @@ Prob ProbPrep::create_sub_probs(int stage)
 	}
 
 	add_sub_vars(prob, *solver, SPprobINFO->TIME_col_idx->at(stage), end);
-	//cout << " ----- sub_"<< stage <<" vars are added ----- " << endl;
+	std::cout << " ----- sub_"<< stage <<" vars are added ----- " << std::endl;
 	add_sub_obj(prob, *solver);
-	//cout << " ----- sub_" << stage << " obj is added ----- " << endl;
+	std::cout << " ----- sub_" << stage << " obj is added ----- " << std::endl;
 	add_sub_rngs(prob, *solver);
-	//cout << " ----- sub_" << stage << " ranges are added ----- " << endl;
+	std::cout << " ----- sub_" << stage << " ranges are added ----- " << std::endl;
 
 	prob.model_name = SPprobINFO->dirr_model + SPprobINFO->output_model +
 		"sub" + std::to_string(stage) + SPprobINFO->model_type;
@@ -654,8 +663,6 @@ void ProbPrep::add_sub_vars(Prob& prob, Solver_CPLEX& solver, int start, int end
 
 void ProbPrep::add_sub_rngs(Prob& prob, Solver_CPLEX& solver)
 {
-	//cout << SPprobINFO.TIME_row_idx[0] << " " << SPprobINFO.TIME_row_idx[1]
-	//	<< " " << SPprobINFO.TIME_row_idx[2] << endl;
 
 	solver.decompose_range(*mean_prob->range_raw, prob, *prob.vars_raw, 
 		                   SPprobINFO->TIME_row_idx->at(1), SPprobINFO->TIME_row_idx->at(2));

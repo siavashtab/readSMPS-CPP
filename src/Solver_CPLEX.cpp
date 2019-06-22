@@ -479,13 +479,10 @@ void Solver_CPLEX::decompose_range(IloRangeArray& mean_rng, Prob& prob, IloNumVa
 				rng_type(mean_rng[r]), empty_expr, mean_rng[r].getName());
 
 			prob.range_raw->add(empty_range);
-
 			prob.prev_rng_coefs_raw->push_back(empty_prev_coef);
 			prob.rng_coefs_raw->push_back(empty_coef);
-			//cout << empt_prev_vars->getSize() << " ";
 			prob.prev_vars_raw->push_back(empt_prev_vars);
-			//cout << prob.prev_vars_raw[prob.prev_vars_raw.size() - 1].getSize() << endl;
-			//cout << prob.prev_vars_raw->size() << endl;
+
 		}
 
 		expr_size = 0;

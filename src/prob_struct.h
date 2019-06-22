@@ -210,8 +210,8 @@ struct RV_info
 	int rv_type;    //(0)RHS - (1)Cost - (2)Coeff
 	int rv_row_num; //row number 
 	int rv_col_num; //colum number 
-	const std::string * ColName;
-	const std::string * RowName;
+	std::string * ColName;
+	std::string * RowName;
 
 	const char * name;
 	std::string * id;

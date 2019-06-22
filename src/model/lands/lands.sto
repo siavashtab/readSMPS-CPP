@@ -1,0 +1,6 @@
+STOCH         LandS
+INDEP         DISCRETE
+    RHS       S2C5      3.0                      0.3
+    RHS       S2C5      5.0                      0.4
+    RHS       S2C5      7.0                      0.3
+ENDATA
