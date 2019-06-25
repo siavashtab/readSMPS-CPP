@@ -24,3 +24,27 @@ readSMPS: A package for reading and saving the information of two stage stochast
 ## Dependencies:
 
 - This package needs the CPLEX(Concert Technology) solver for optimization parts. 
+
+------------------
+
+## SMPS 
+
+- SMPS is an efficient and effective way of describing stochastic programs. 
+
+  It contains the follwoing files:
+  
+  1 - _.cor:
+  
+     This file is the core of the formulation which is basically derived from the 
+	 mean value problem. It's format is very similar to _.mps files.
+	 
+  2 - _.tim
+    
+	This file contains the information of the stages. the name of rows and columns 
+	associated with each stage
+	
+  3 - _.sto
+  
+    This file contains the information about the random variables and their distribution
+	Also, place in which the random variables appear in the second stage problem
+	
