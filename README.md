@@ -4,6 +4,7 @@
 [![license](https://github.com/siavashtab/2slpEval/tree/master/LICENSE)](https://github.com/siavashtab/2slpEval/tree/master/LICENSE)
 
 reading SMPS format files for two-stage stochastic programs
+
 ------------------
 
 ##  Author: Siavash Tabrizian -- stabrizian@gmail.com 
@@ -23,7 +24,16 @@ readSMPS: A package for reading and saving the information of two stage stochast
 
 ## Dependencies:
 
-- This package needs the CPLEX(Concert Technology) solver for optimization parts. 
+- This package needs the CPLEX (Concert Technology) solver for optimization parts, 
+  and the problem will be created based on the  CPLEX (Concert Technology) objects.
+
+------------------
+
+## Output
+
+- this program will read the SMPS files, decompose the problem
+  into a master and subproblem based on the CPLEX (Concert Technology) objects. 
+  The data structure in which problems will be stored are all defined in prob_struct.h
 
 ------------------
 
@@ -40,11 +50,11 @@ readSMPS: A package for reading and saving the information of two stage stochast
 	 
   2 - _.tim
     
-	This file contains the information of the stages. the name of rows and columns 
+	This file contains the information of stages. The name of rows and columns 
 	associated with each stage
 	
   3 - _.sto
   
-    This file contains the information about the random variables and their distribution
-	Also, place in which the random variables appear in the second stage problem
+    This file contains the information about the random variables, and their distribution.
+	Also, it shows the place in which the random variables appear in the second stage problem
 	
