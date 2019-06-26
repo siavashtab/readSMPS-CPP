@@ -1,5 +1,21 @@
 
 
+/*****************************************************************************************\
+**
+** Sampling Class
+**
+** This file contains the routines needed to generate samples
+** 
+**
+**
+**
+**
+** History:
+**   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
+**
+\******************************************************************************************/
+
+
 #include"Sampling.h"
 #include"seeds.h"
 

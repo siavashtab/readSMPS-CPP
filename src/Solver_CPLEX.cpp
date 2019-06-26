@@ -1,4 +1,20 @@
 
+/*****************************************************************************************\
+**
+** Solver_CPLEX Class
+**
+** This file contains the routines needed to use the optimization solver(CPLEX)
+**
+**
+**
+**
+**
+** History:
+**   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
+**
+\******************************************************************************************/
+
+
 #include"Solver_CPLEX.h"
 
 

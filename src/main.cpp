@@ -1,6 +1,6 @@
 /*****************************************************************************************\
 **
-** This code is written for reading SMPS format files and solving them using ACS sampling
+** This code is written for reading SMPS format files and create decomposed problems
 **
 **
 ** History:
