@@ -1,4 +1,18 @@
 
+/*****************************************************************************************\
+**
+** prob_struct.h 
+**
+** All structures used in the code for storing the problems in CPLEX objects
+**
+**
+**
+**
+**
+** History:
+**   March 2019 - Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
+**
+\******************************************************************************************/
 
 #include"Header.h"
 

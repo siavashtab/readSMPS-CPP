@@ -1,7 +1,7 @@
 
 /*****************************************************************************************\
 **
-** ProbPrep Class
+** ProbPrep Class (ProbPrep.cpp)
 **
 ** This file contains the routines needed to read SMPS format files
 **
@@ -13,8 +13,6 @@
 **   March 2019 - Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
 **
 \******************************************************************************************/
-
-
 
 #include"ProbPrep.h"
 

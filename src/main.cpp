@@ -1,6 +1,11 @@
 /*****************************************************************************************\
 **
-** This code is written for reading SMPS format files and create decomposed problems
+** This code is written for reading SMPS format files and saving in the 
+** CPLEX(Concert Technology) objects ( structures are defined in prob_struct.h)
+**
+**
+**
+**
 **
 **
 ** History:

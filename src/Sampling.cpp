@@ -1,11 +1,10 @@
 
-
 /*****************************************************************************************\
 **
-** Sampling Class
+** Sampling Class (Sampling.cpp)
 **
 ** This file contains the routines needed to generate samples
-** 
+**
 **
 **
 **
@@ -14,7 +13,6 @@
 **   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
 **
 \******************************************************************************************/
-
 
 #include"Sampling.h"
 #include"seeds.h"

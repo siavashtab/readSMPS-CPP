@@ -1,4 +1,16 @@
 
+/*****************************************************************************************\
+** utils.cpp
+**
+**
+**
+** Utility functions for working with vectors
+**
+** History:
+**   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
+**
+\******************************************************************************************/
+
 
 #include "utils.h"
 
@@ -201,10 +213,10 @@ int findintVector(std::vector<int>& vec, int& tmp)
 }
 
 // find maximum value in a vector
-int maxVector(std::vector<double>& vec)
+int utils::maxVector(const std::vector<double>& vec)
 {
 
-	std::vector<double>::iterator result;
+	std::vector<double>::const_iterator result;
 	result = std::max_element(vec.begin(), vec.end());
 	int loc = std::distance(vec.begin(), result);
 
@@ -213,7 +225,7 @@ int maxVector(std::vector<double>& vec)
 //****************End of find maximum value in a vectorfuntion****************
 
 // find a number of maximum values in a vector
-std::vector<int> maxVector_num(std::vector<double> vec, int num)
+std::vector<int> utils::maxVector_num(const std::vector<double> vec, int num)
 {
 
 	int N = vec.size();
@@ -231,7 +243,7 @@ std::vector<int> maxVector_num(std::vector<double> vec, int num)
 //****************End of find maximum value in a vectorfuntion****************
 
 // find a number of minimum values in a vector
-std::vector<int> minVector_num(std::vector<double> vec, int num)
+std::vector<int> utils::minVector_num(const std::vector<double> vec, int num)
 {
 
 	int N = vec.size();
@@ -248,7 +260,7 @@ std::vector<int> minVector_num(std::vector<double> vec, int num)
 }
 //****************End of find minimum value in a vectorfuntion****************
 // find a number of minimum values in a vector
-std::vector<int> meanVector_num(std::vector<double> vec, int num)
+std::vector<int> utils::meanVector_num(const std::vector<double> vec, int num)
 {
 
 	int N = vec.size();
@@ -268,10 +280,10 @@ std::vector<int> meanVector_num(std::vector<double> vec, int num)
 }
 //****************End of find minimum value in a vectorfuntion****************
 // find minimum value in a vector
-int minVector(std::vector<double>& vec)
+int utils::minVector(const std::vector<double>& vec)
 {
 
-	std::vector<double>::iterator result;
+	std::vector<double>::const_iterator result;
 	result = std::min_element(vec.begin(), vec.end());
 	int loc = std::distance(vec.begin(), result);
 
@@ -280,10 +292,10 @@ int minVector(std::vector<double>& vec)
 //****************End of find minimum value in a vectorfuntion****************
 
 // find maximum value in a vector
-int maxintVector(std::vector<int>& vec)
+int utils::maxVector(const std::vector<int>& vec)
 {
 
-	std::vector<int>::iterator result;
+	std::vector<int>::const_iterator result;
 	result = std::max_element(vec.begin(), vec.end());
 	int loc = std::distance(vec.begin(), result);
 
@@ -292,10 +304,10 @@ int maxintVector(std::vector<int>& vec)
 //****************End of find maximum value in a vectorfuntion****************
 
 // find minimum value in a vector
-int minintVector(std::vector<int>& vec)
+int utils::minVector(const std::vector<int>& vec)
 {
 
-	std::vector<int>::iterator result;
+	std::vector<int>::const_iterator result;
 	result = std::min_element(vec.begin(), vec.end());
 	int loc = std::distance(vec.begin(), result);
 

@@ -1,7 +1,7 @@
 
 /*****************************************************************************************\
 **
-** Solver_CPLEX Class
+** Solver_CPLEX Class (Solver_CPLEX.cpp)
 **
 ** This file contains the routines needed to use the optimization solver(CPLEX)
 **
@@ -13,7 +13,6 @@
 **   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
 **
 \******************************************************************************************/
-
 
 #include"Solver_CPLEX.h"
 

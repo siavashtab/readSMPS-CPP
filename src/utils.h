@@ -1,5 +1,8 @@
 
 /*****************************************************************************************\
+** utils.h
+**
+**
 **
 ** Utility functions for working with vectors
 **
@@ -20,16 +23,15 @@ namespace utils {
 	double variance_func(const std::vector<int>& vec);
 	bool   inVector(const std::vector<double>& vec, const double& tmp);
 	bool   inVector(const vec2_d& vec, const vec_d& tmp);
-	bool   inVector(const std::vector<std::vector<IloNum>>& vec, const std::vector<IloNum>& tmp);
 	bool   inVector(const vec2_d& vec, const vec_d& tmp, int& pos);
 	bool   inVector(const std::vector<int>& vec, const int& tmp);
-	int    maxVector(std::vector<double>& vec);
-	std::vector<int>    maxVector_num(std::vector<double> vec, int num);
-	std::vector<int>    minVector_num(std::vector<double> vec, int num);
-	std::vector<int>    meanVector_num(std::vector<double> vec, int num);
-	int    minVector(std::vector<double>& vec);
-	int    maxintVector(std::vector<int>& vec);
-	int    minintVector(std::vector<int>& vec);
+	std::vector<int>    maxVector_num(const std::vector<double> vec, int num);
+	std::vector<int>    minVector_num(const std::vector<double> vec, int num);
+	std::vector<int>    meanVector_num(const std::vector<double> vec, int num);
+	int    maxVector(const std::vector<double>& vec);
+	int    minVector(const std::vector<double>& vec);
+	int    maxVector(const std::vector<int>& vec);
+	int    minVector(const std::vector<int>& vec);
 	int    findVector(const std::vector<double>& vec, const double& tmp);
 	int    findVector(const vec2_d& vec, const vec_d& tmp);
 	vec_d  element_w_prod(vec_d& v, vec_d& u);

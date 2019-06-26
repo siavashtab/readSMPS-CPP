@@ -1,6 +1,6 @@
 /*****************************************************************************************\
 **
-** Solver_CPLEX Class
+** Solver_CPLEX Class (Solver_CPLEX.h)
 **
 ** This file contains the routines needed to use the optimization solver(CPLEX)
 **

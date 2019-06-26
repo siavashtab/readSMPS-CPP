@@ -12,13 +12,7 @@
 
 #include "Header.h"
 
-
-
-const std::string currentDateTime();
-
-double get_cpu_time();
-double get_wall_time();
-
 std::istream& safeGetline(std::istream& is, std::string& t);
+
 
 #endif

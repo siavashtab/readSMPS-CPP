@@ -1,7 +1,7 @@
 
 /*****************************************************************************************\
 **
-** Sampling Class
+** Sampling Class (Sampling.h)
 **
 ** This file contains the routines needed to generate samples
 ** 

@@ -1,6 +1,6 @@
 /*****************************************************************************************\
 **
-** ProbPrep Class
+** ProbPrep Class (ProbPrep.h)
 **
 ** This file contains the routines needed to read SMPS format files
 **
