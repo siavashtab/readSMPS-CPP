@@ -12,15 +12,6 @@
 
 
 
-//SAA Infos
-#define   Experiments     1                      //doing experiments on number of scenarios?
-#define   Expr_num        5                      //number of experiments
-#define   SAA_rep_num     30                     //SAA number of replication
-#define   initial_scen    10                    //initial number of scenarios
-#define   out_sample_std    0.002                //out sample error
-#define   out_sample_max    20000                //out sample error
-#define   out_sample_min    1000                 //out sample error
-
 
 //Printing options
 #define   sub_rhs_print          1      //for printing the information of the subproblem rhs

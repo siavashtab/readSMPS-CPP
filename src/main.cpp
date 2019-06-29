@@ -24,6 +24,10 @@ main()
 	std::string instance;
 	std::cin >> instance;
 
+	std::cout << "Sample Size:";
+	int initial_scen;
+	std::cin >> initial_scen;
+
 	//Initial the problem instance
 	ProbPrep* problem;
 	problem = new ProbPrep();

@@ -270,7 +270,7 @@ void ProbPrep::read_STOC()
 	std::string col1, col2, col3, col4;
 	int flag = 0;
 
-	while (!safeGetline(stoFileStream, col1).eof())
+	while (!getline(stoFileStream, col1).eof())
 	{
 
 		std::stringstream lineStream(col1);
@@ -306,7 +306,7 @@ void ProbPrep::read_STOC_INDEP()
 	newRV(rv_empty);
 	double sum = 0;
 	
-	while (!safeGetline(stoFileStream, col1).eof())
+	while (!getline(stoFileStream, col1).eof())
 	{
 
 		std::stringstream lineStream(col1);
