@@ -44,7 +44,7 @@ double utils::avg_func(const std::vector<double>& vv)
 }
 //****************End of average funtion****************
 
-bool falls_in_range(vec2_d& range, vec_d& val)
+bool utils::falls_in_range(const vec2_d& range, const vec_d& val)
 {
 	bool pass = true;
 
@@ -201,10 +201,10 @@ int utils::findVector(const vec2_d& vec, const vec_d& tmp)
 }
 
 // find the position of a tmp in a vector
-int findintVector(std::vector<int>& vec, int& tmp)
+int utils::findintVector(const std::vector<int>& vec, int& tmp)
 {
 
-	std::vector<int>::iterator locc;
+	std::vector<int>::const_iterator locc;
 	locc = std::find(vec.begin(), vec.end(), tmp);
 	int loc = distance(vec.begin(), locc);
 
@@ -225,7 +225,7 @@ int utils::maxVector(const std::vector<double>& vec)
 //****************End of find maximum value in a vectorfuntion****************
 
 // find a number of maximum values in a vector
-std::vector<int> utils::maxVector_num(const std::vector<double> vec, int num)
+std::vector<int> utils::maxVector_num(const std::vector<double>& vec, int num)
 {
 
 	int N = vec.size();
@@ -243,7 +243,7 @@ std::vector<int> utils::maxVector_num(const std::vector<double> vec, int num)
 //****************End of find maximum value in a vectorfuntion****************
 
 // find a number of minimum values in a vector
-std::vector<int> utils::minVector_num(const std::vector<double> vec, int num)
+std::vector<int> utils::minVector_num(const std::vector<double>& vec, int num)
 {
 
 	int N = vec.size();
@@ -260,7 +260,7 @@ std::vector<int> utils::minVector_num(const std::vector<double> vec, int num)
 }
 //****************End of find minimum value in a vectorfuntion****************
 // find a number of minimum values in a vector
-std::vector<int> utils::meanVector_num(const std::vector<double> vec, int num)
+std::vector<int> utils::meanVector_num(const std::vector<double>& vec, int num)
 {
 
 	int N = vec.size();
@@ -316,7 +316,7 @@ int utils::minVector(const std::vector<int>& vec)
 //****************End of find minimum value in a vectorfuntion****************
 
 // || v - u||^2
-double l2normOfminus_vec(std::vector<double>& v, std::vector<double>& u)
+double utils::l2normOfminus_vec(const std::vector<double>& v, const std::vector<double>& u)
 {
 
 	double d_uv = 0;
@@ -332,18 +332,18 @@ double l2normOfminus_vec(std::vector<double>& v, std::vector<double>& u)
 }
 //****************End of || v - u||^2****************
 
-vec_d element_w_prod(vec_d& v, vec_d& u)
+vec_d utils::element_w_prod(const vec_d& v, const vec_d& u)
 {
 	
 	vec_d out;
 
-	for (int i = 0; i < v.size(); i++) out.push_back(v[i] * u[i]);
+	for (int i = 0; i < v.size(); ++i) out.push_back(v[i] * u[i]);
 
 	return out;
 
 }
 
-vec_d const_prod(vec_d& v, double w)
+vec_d utils::const_prod(const vec_d& v, double w)
 {
 	vec_d out;
 
@@ -388,23 +388,33 @@ void   update_center_cluster(vec_d& Center_Pi, vec_d& Pi, int pi_num)
 //****************End of Finding the center of each cluster****************
 
 /// Mean VEctor
-double mean_vec_d(std::vector<double>& v)
+double utils::meanVector(const std::vector<double>& vec)
 {
-	double sum = std::accumulate(v.begin(), v.end(), 0.0);
-	double mean = sum / v.size();
+	double sum = std::accumulate(vec.begin(), vec.end(), 0.0);
+	double mean = sum / vec.size();
+	return mean;
+}
+
+//****************End of mean vector****************
+
+/// Mean VEctor
+double utils::meanVector(const std::vector<int>& vec)
+{
+	double sum = std::accumulate(vec.begin(), vec.end(), 0.0);
+	double mean = sum / vec.size();
 	return mean;
 }
 
 //****************End of mean vector****************
 
 /// STD VEctor
-double std_vec_d(std::vector<double>& v)
+double utils::stdVector(const std::vector<double>& vec)
 {
-	double stdes = std::sqrt(utils::variance_func(v));
+	double stdes = std::sqrt(utils::variance_func(vec));
 	return stdes;
 }
 
-double std_vec_d(vec2_d& v)
+double utils::stdVector(const vec2_d& v)
 {
 	double stdes = 0;
 	
@@ -421,16 +431,16 @@ double std_vec_d(vec2_d& v)
 //****************End of STD vector****************
 
 /// STD VEctor
-double std_vec_i(std::vector<int>& v)
+double utils::stdVector(const std::vector<int>& vec)
 {
-	double stdes = std::sqrt(utils::variance_func(v));
+	double stdes = std::sqrt(utils::variance_func(vec));
 	return stdes;
 }
 
 //****************End of STD vector****************
 
 /// Square VEctor
-double square_vec_d(std::vector<double>& v)
+double utils::square_vec_d(const std::vector<double>& v)
 {
 	double sumv = accumulate(v.begin(), v.end(), 0.0);
 	double aver = sumv / (double)v.size();
@@ -440,7 +450,7 @@ double square_vec_d(std::vector<double>& v)
 }
 
 /// Square VEctor
-double square_vec_d(vec2_d& v)
+double utils::square_vec_d(const vec2_d& v)
 {
 	double ssw = 0;
 	
@@ -454,19 +464,19 @@ double square_vec_d(vec2_d& v)
 
 //****************End of Square vector****************
 
-void print_vectori(vec_i& v)
+void utils::print_vector(const vec_i& v)
 {
 	for (std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
 		std::cout << *i << ' ';
 }
 
-void print_vectord(vec_d& v)
+void utils::print_vector(const vec_d& v)
 {
 	for (std::vector<double>::const_iterator i = v.begin(); i != v.end(); ++i)
 		std::cout << *i << ' ';
 	std::cout << std::endl;
 }
-void print_vectord(vec2_d& v)
+void utils::print_vector(const vec2_d& v)
 {
 	for (vec2_d::const_iterator i = v.begin(); i != v.end(); ++i)
 	{
@@ -481,9 +491,9 @@ void print_vectord(vec2_d& v)
 }
 //*****************************************************
 
-double sum_square(vec_d& v)
+double utils::sum_square(const vec_d& v)
 {
-	double m = mean_vec_d(v);
+	double m = utils::meanVector(v);
 	double ss = 0;
 	for (int i = 0; i < v.size(); i++) ss += (v[i] - m)*(v[i] - m);
 	return ss;
@@ -491,7 +501,7 @@ double sum_square(vec_d& v)
 
 //******************************************************
 
-vec_d get_Centre(vec2_d& v)
+vec_d utils::get_Centre(const vec2_d& v)
 {
 	vec_d empt;
 
@@ -510,7 +520,7 @@ vec_d get_Centre(vec2_d& v)
 
 //******************************************************
 
-double L1_dist(vec_d& v, vec_d& u)
+double utils::L1_dist(const vec_d& v, const vec_d& u)
 {
 	double ans = 0;
 
@@ -524,7 +534,7 @@ double L1_dist(vec_d& v, vec_d& u)
 
 //********************************************************
 
-vec_d prod_components(vec_d& v, vec_d& u)
+vec_d utils::prod_components(const vec_d& v, const vec_d& u)
 {
 	int vsize = v.size();
 	int usize = u.size();
@@ -547,7 +557,7 @@ vec_d prod_components(vec_d& v, vec_d& u)
 
 //********************************************************
 
-int max_diff(vec_d& v, double& val)
+int utils::max_diff(const vec_d& v, double& val)
 {
 	int idx;
 	int max_val = -INFINITY;
@@ -567,7 +577,7 @@ int max_diff(vec_d& v, double& val)
 
 //********************************************************
 
-int max2_diff(vec_d& v, vec_d& u)
+int utils::max_diff(const vec_d& v, const vec_d& u)
 {
 	int idx;
 	int max_val = -INFINITY;
