@@ -4,11 +4,11 @@
 **
 **
 **
-** Utility functions for working with vectors
+** Utility functions for working with std::vector
 **
 ** History:
 **   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
-**
+**   Copyright (c) 2019. All rights reserved.
 \******************************************************************************************/
 
 

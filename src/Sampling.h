@@ -3,7 +3,7 @@
 **
 ** Sampling Class (Sampling.h)
 **
-** This file contains the routines needed to generate samples
+** This file contains the subroutines needed to generate samples
 ** 
 **
 **
@@ -11,7 +11,7 @@
 **
 ** History:
 **   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
-**
+**   Copyright (c) 2019. All rights reserved.
 \******************************************************************************************/
 
 

@@ -2,7 +2,7 @@
 **
 ** ProbPrep Class (ProbPrep.h)
 **
-** This file contains the routines needed to read SMPS format files
+** This file contains the subroutines needed to read SMPS format files
 **
 **
 **
@@ -10,7 +10,7 @@
 **
 ** History:
 **   March 2019 - Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
-**
+**   Copyright (c) 2019. All rights reserved.
 \******************************************************************************************/
 
 #ifndef ProbPrep_h

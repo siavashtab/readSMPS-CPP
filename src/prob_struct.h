@@ -11,7 +11,7 @@
 **
 ** History:
 **   March 2019 - Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
-**
+**   Copyright (c) 2019. All rights reserved.
 \******************************************************************************************/
 
 #include"Header.h"

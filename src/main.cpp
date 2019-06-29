@@ -11,7 +11,7 @@
 ** History:
 **   Author: Siavash Tabrizian   stabrizian@gmail.com stabrizian@smu.edu
 **           https://github.com/siavashtab
-**
+**   Copyright (c) 2019. All rights reserved.
 \******************************************************************************************/
 
 #include"ProbPrep.h"
