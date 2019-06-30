@@ -11,9 +11,14 @@ reading SMPS format files for two-stage stochastic programs
 
 ------------------
 
-## Description:
+## Intoduction:
 
 readSMPS: A package for reading and saving the information of two stage stochastic programs from SMPS files
+
+It seems that there are implementation for reading SMPS files which are either written in other 
+programming languages (C or Julia) or they do not provide a suitable data structures for L-shaped 
+based algorithm. Moreover, it would be crucial to facilitate the problem that can handle sampling 
+techniques for stochastic programming which can be done in this code.
 
 -  this package store the problem information in CPLEX Concert Technology format
 -  the distribution of random variables are discrete (even if it is not discrete it can be turned to a discrete distribution)
@@ -57,4 +62,16 @@ readSMPS: A package for reading and saving the information of two stage stochast
   
     This file contains the information about the random variables, and their distribution.
 	Also, it shows the place in which the random variables appear in the second stage problem
-	
+
+-------------------
+
+## Description
+
+The program starts with asking the instance name and the number of samples
+~~~~
+>> Inter Test Instance Name:
+>> Sample Size:
+~~~~
+After that it will produce the decomposed problems which is suitable for 
+L-shaped type of algorithms
+
