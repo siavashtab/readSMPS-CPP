@@ -7,7 +7,7 @@ reading SMPS format files for two-stage stochastic programs
 
 ------------------
 
-##  Author: Siavash Tabrizian -- stabrizian@gmail.com 
+##  Author: Siavash Tabrizian -- stabrizian@smu.edu
 
 ------------------
 
