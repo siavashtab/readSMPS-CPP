@@ -1,6 +1,6 @@
 /*****************************************************************************************\
 **
-** This code is written for reading SMPS format files and saving in the 
+** This code is written for reading SMPS format files and saving it in terms of the 
 ** CPLEX(Concert Technology) objects ( structures are defined in prob_struct.h)
 **
 **
