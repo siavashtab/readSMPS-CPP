@@ -22,7 +22,7 @@ techniques for stochastic programming which can be done in this code.
 
 -  this package store the problem information in CPLEX Concert Technology format
 -  the distribution of random variables are discrete (even if it is not discrete it can be turned to a discrete distribution)
--  randomness is on the right handside of the recourse function
+-  randomness is on the right handside of the recourse problem
 -  COR file contains the mean value problem which its optimal value yields a lower bound
 
 ------------------
