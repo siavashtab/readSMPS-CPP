@@ -15,7 +15,7 @@ reading SMPS format files for two-stage stochastic programs
 
 readSMPS: A package for reading and saving the information of two stage stochastic programs from SMPS files
 
-It seems that there are implementations for reading SMPS files which are either written in other 
+There are implementations for reading SMPS files which are either written in other 
 programming languages (C or Julia) or do not provide a suitable data structures for L-shaped 
 based algorithms (based on CPLEX solver). Moreover, it would be crucial to facilitate the problem that can handle sampling 
 techniques for stochastic programming which can be done in this code.
