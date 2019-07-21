@@ -40,24 +40,6 @@
 #define   Regular_LShaped        1      //Regularized LShaped(1) - Linear obj master LShaped (1)
 #define   Multi_LShaped          1      //Single(0) - Multi(1)
 #define   Remove_Old_Cuts        0      //Remove old cuts
-#define   LShaped_maxiter        500    
-#define   LShaped_miniter        5 
-#define   LShaped_gap            0.0001
-#define   LShaped_reg_sigma      0.001
-
-//ACS Configs
-#define   ACS_cov           0.00001  //ACS neighborhood coverage in 0-1 interval
-#define   min_n_c           20       //minimum # of samples within cluster
-#define   max_n_c           1000     //maximum # of samples within cluster pgp2(50) storm(50) ssn(50) retail(100)
-#define   neighb            1000     //fraction of answers in the neighborhood strom(0.001) pgp2(1) ssn(0.01) retail(10)
-#define   min_thre          1        //minimum # of samples within cluster
-#define   disp_point_estim           1        //display the point estimate
-#define   disp_point_estim_iter      0        //display the point estimate
-#define   print_point_Estim_samples  0  
-#define   print_SSW_info             0
-#define   print_SSW_info_seq         0
-#define   scen_or_clust              0        //scenario based(0) ACS or cluster based(1)
-#define   scen_type                  1        //monte(0) lhs(1)
 
 
 #endif;
