@@ -29,7 +29,7 @@
 
 
 //Sampling Configs
-#define   Sampling_Method                1           //monte carlo(0) - lhs(1) - ACS(2)
+#define   Sampling_Method                1           //monte carlo(0) - lhs(1) 
 #define   Display_Samples                0           //display the taken samples
 
 //File Reading Configs
