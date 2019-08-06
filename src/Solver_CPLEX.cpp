@@ -165,26 +165,6 @@ void Solver_CPLEX::Create_Prob(Prob& prob)
 }
 
 
-std::string Solver_CPLEX::getProbtype(Prob& prob)
-{
-
-	if (prob.cplex->isMIP()) 
-	{
-		if (prob.cplex->isQC())       return "MIPQP";
-		else if (prob.cplex->isQO())  return "MIQP";
-		else                         return "MILP";
-	}
-	else 
-	{
-		if (prob.cplex->isQC())         return "QCP";
-		else if (prob.cplex->isQO())    return "QP";
-		else                           return "LP";
-	}
-
-	return "Prob Type ERROR";
-
-}
-
 void Solver_CPLEX::setDefault(Prob& prob) 
 {
 
@@ -432,8 +412,7 @@ void Solver_CPLEX::set_rhs_val(IloRange& rng, IloNum val)
 
 IloNum Solver_CPLEX::get_rhs(IloRange& rng)
 {
-	//cout << rng.getUB() << "  " << rng.getLB() << endl;
-	//cout << INFINITY << "  " << -INFINITY << endl;
+	
 	if (rng.getUB() <
 		INFINITY && rng.getLB() > -INFINITY) {
 		return rng.getLB();
@@ -505,16 +484,9 @@ void Solver_CPLEX::decompose_range(IloRangeArray& mean_rng, Prob& prob, IloNumVa
 		empty_coef.clear();
 		empty_prev_coef.clear();
 		empty_expr.clear();
-		//cout << prob.prev_vars_raw[0].getSize() << endl;
+		
 	}//loop over ranges
 
-	//for (int i = 0; i < prob.prev_vars_raw.size(); i++)
-	//{
-	//	for (int j = 0; j < prob.prev_vars_raw[i].getSize(); j++)
-	//	{
-	//		cout << i << " " << j << endl;
-	//	}
-	//}
 	
 }
 
@@ -539,12 +511,9 @@ void Solver_CPLEX::set_rhs_var(Prob& prob, std::vector<SOL_str>& var, std::vecto
 			for (int i = 0; i < var.size(); i++)
 			{
 				int pos = prob.prev_vars_raw->at(r).find(*var[i].var);
-				//cout << r << " " << prob.prev_vars_raw[r].getSize() << " ";
-				//cout << *var[i].var << " " << pos << " " << endl;
+
 				if (pos != -1)
 				{
-					//cout << prob.prev_rng_coefs_raw[r][pos].val << " ";
-					//cout << var[i].value << " ";
 					Cxr += prob.prev_rng_coefs_raw->at(r)[pos].val * var[i].value;
 					beta[i] = (double)prob.prev_rng_coefs_raw->at(r)[pos].val;
 				}
@@ -556,8 +525,6 @@ void Solver_CPLEX::set_rhs_var(Prob& prob, std::vector<SOL_str>& var, std::vecto
 			Cx[r] = Cxr;
 		}
 		
-		//cout << endl;
-		//cout << Cx << endl;
 
 		prob.r_w->push_back((double)rhs[r].value);
 		prob.Cx->push_back((double)Cx[r]);
