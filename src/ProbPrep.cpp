@@ -67,20 +67,14 @@ void ProbPrep::newProb(Prob &tmpProb)
 	tmpProb.dual_R = new vec_d;
 	tmpProb.dual_tot = new vec_d;
 	tmpProb.strType = new std::string;
-	//tmpProb.feas_cut_duals = new std::vector<SOL_str>;
 	tmpProb.id = new std::string;
-	//tmpProb.LShaped_feas = new IloRangeArray;
-	//tmpProb.master_cuts = new IloRangeArray;
 	tmpProb.obj_coef_raw = new std::vector<Coeff_Sparse>;
-	//tmpProb.opt_cut_duals = new std::vector<SOL_str>;
-	//tmpProb.other_cuts = new std::vector<IloRange>;
 	tmpProb.prev_rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
 	tmpProb.prev_vars_raw = new std::vector<IloNumVarArray>;
 	tmpProb.probType = new std::string;
 	tmpProb.rho = new vec_d;
 	tmpProb.rhs = new std::vector<SOL_str>;
 	tmpProb.rng_coefs_raw = new std::vector<std::vector<Coeff_Sparse>>;
-	//tmpProb.R_vars_raw = new IloNumVarArray;
 	tmpProb.r_w = new vec_d;
 	tmpProb.sol = new std::vector<SOL_str>;
 	tmpProb.sol_R = new std::vector<SOL_str>;
@@ -605,13 +599,13 @@ void ProbPrep::add_master_obj(Prob& prob, Solver_CPLEX& solver)
 
 	*prob.obj_raw = solver.Create_OBJ_explicit(mean_prob->obj_raw->getSense(), empty_expr, mean_prob->obj_raw->getName());
 	empty_expr.end();
-	//cout << " ----- master obj is added ----- " << endl;
+	std::cout << " ----- master obj is added ----- " << std::endl;
 }
 
 void ProbPrep::print_master_prob(Prob& prob)
 {
 	solver->Print_Prob(prob);
-	//cout << " ----- master is printed ----- " << endl;
+	std::cout << " ----- master is printed ----- " << std::endl;
 }
 #pragma endregion creating the master problem
 
