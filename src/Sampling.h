@@ -31,8 +31,7 @@ public:
 
 
 	std::vector<SSample> samples;                               //all samples structures
-	std::vector<Clusters_SSample> clusterSamples;               //samples put in clusters
-	std::vector<Partitions>       partitions;                   //collection of dual partitions
+
 
 	void set_random_rhs(std::vector<SOL_str>&  rhs, int scen);
 	void set_random_rhs_EVAL(std::vector<SOL_str>&  rhs, std::vector<RV_info>& rv, std::mt19937& randgen);
