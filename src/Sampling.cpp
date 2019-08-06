@@ -45,7 +45,6 @@ IloNum Sampling::RV_Gen(RV_info& rv, std::mt19937& randgen, vec_d& zero_one_l, b
 
 	std::map<double, double>::iterator it;
 
-	//map<val, cumulative sum>
 	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		if (rnd <= it->second)
@@ -236,10 +235,7 @@ vec_d Sampling::rev_zero_one(RV_info& rv, vec_d val, double& lower, double& uppe
 		}
 	}
 
-	
 
-	//printf("val0: %0.02f  ,  val1: %0.02f , z1_0: %0.06f , z1_1: %0.06f  \n", val[0], val[1], tmp[0], tmp[1]);
-	//int ss = getchar();
 
 	return tmp;
 
@@ -266,9 +262,6 @@ double Sampling::rev_zero_one_d(RV_info& rv, double val)
 		}
 	}
 
-	//printf("val0: %0.02f  ,  val1: %0.02f , z1_0: %0.06f , z1_1: %0.06f  \n", val[0], val[1], tmp[0], tmp[1]);
-	//int ss = getchar();
-
 	return tmp;
 
 }
@@ -277,10 +270,7 @@ IloNum Sampling::RV_Gen_EVAL(RV_info& rv, std::mt19937& randgen)
 {
 	std::uniform_real_distribution<double> dis(0, 1);
 	double rnd = (double)dis(randgen);
-	//cout << endl;
-	//cout << rnd << "," << endl;
 
-	//map<val, cumulative sum>
 	for (std::map<double, double>::iterator it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		//cout << it->second << ",";
@@ -295,7 +285,7 @@ IloNum Sampling::RV_Gen_EVAL(RV_info& rv, std::mt19937& randgen)
 
 	std::map<double, double>::iterator it = rv.CDF->end();
 	return (IloNum)it->first;
-	//cout << endl;
+
 }
 
 std::tuple<IloNum, double> Sampling::RV_Gen_PE(RV_info& rv, std::mt19937& randgen, double Ll, double Ul)
@@ -307,8 +297,7 @@ std::tuple<IloNum, double> Sampling::RV_Gen_PE(RV_info& rv, std::mt19937& randge
 	if (printing == true) std::cout << Ll << " , ";
 
 	std::map<double, double>::iterator it;
-
-	//map<val, cumulative sum>
+	
 	for (it = rv.CDF->begin(); it != rv.CDF->end(); ++it)
 	{
 		
@@ -346,29 +335,6 @@ vec_d Sampling::zero_one_LHS(double val)
 }
 
 
-double Sampling::sample_variablity(std::vector<SSample>& samples)
-{
-	vec2_d samples_vector;
-	double var_sum = 0;
-	for (int s = 0; s < samples.size(); s++)
-	{
-		double sum = 0;
-		for (int r = 0; r < samples[s].sample.Samples.size(); r++)
-		{
-			sum += samples[s].sample.Samples[r];
-		}
-		double ave = sum / (double)samples[s].sample.Samples.size();
-		double var = 0;
-		for (int r = 0; r < samples[s].sample.Samples.size(); r++)
-		{
-			var += (samples[s].sample.Samples[r] - ave)*(samples[s].sample.Samples[r] - ave);
-		}
-		var_sum += var;
-	}
-
-	return sqrt(var_sum);
-
-}
 
 void Sampling::set_random_rhs(std::vector<SOL_str>&  rhs, int scen)
 {
