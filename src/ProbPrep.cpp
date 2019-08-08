@@ -391,9 +391,9 @@ Prob ProbPrep::create_master_prob()
 	
 	*prob.strType = "master";
 	
-	for (int v1 = 0; v1 < mean_prob->obj_coef_raw->size(); v1++)
+	for (int v1 = 0; v1 < mean_prob->obj_coef_raw->size(); ++v1)
 	{
-		for (int v2 = 0; v2 < solver->getSize(*prob.vars_raw); v2++)
+		for (int v2 = 0; v2 < solver->getSize(*prob.vars_raw); ++v2)
 		{
 			if (mean_prob->obj_coef_raw->at(v1).col_name == solver->getName(prob.vars_raw->operator[](v2)))
 			{
@@ -419,12 +419,12 @@ Prob ProbPrep::create_master_prob()
 	}
 
 	x_reg.resize(prob.vars_raw->getSize());
-	for (int i = 0; i < prob.vars_raw->getSize(); i++) x_reg[i].value = mean_prob->sol->at(i).value;
+	for (int i = 0; i < prob.vars_raw->getSize(); ++i) x_reg[i].value = mean_prob->sol->at(i).value;
 
 	add_master_rngs(prob, *solver);
 	add_master_obj(prob, *solver);
 
-	for (int i = SPprobINFO->TIME_row_idx->at(0); i < SPprobINFO->TIME_row_idx->at(1); i++)
+	for (int i = SPprobINFO->TIME_row_idx->at(0); i < SPprobINFO->TIME_row_idx->at(1); ++i)
 	{
 		prob.rng_coefs_raw->push_back(mean_prob->rng_coefs_raw->at(i));
 	}
@@ -485,7 +485,7 @@ void ProbPrep::add_surrogate_master_vars(Prob& prob, Solver_CPLEX& solver)
 void ProbPrep::add_master_vars(Prob& prob, Solver_CPLEX& solver)
 {
 	int stage_count = 0;
-	for (int v = 0; v < mean_prob->vars_raw->getSize(); v++)
+	for (int v = 0; v < mean_prob->vars_raw->getSize(); ++v)
 	{
 		if (SPprobINFO->TIME_info->at(0)[0] == (std::string)solver.getName(mean_prob->vars_raw->operator[](v)))
 		{
@@ -560,7 +560,7 @@ void ProbPrep::add_master_obj(Prob& prob, Solver_CPLEX& solver)
 
 	if (Multi_LShaped == 1)
 	{
-		for (int s = 1; s < prob.surro_vars_raw->getSize(); s++)
+		for (int s = 1; s < prob.surro_vars_raw->getSize(); ++s)
 		{
 			empty_expr += prob.surro_vars_raw->operator[](s);
 
@@ -571,7 +571,7 @@ void ProbPrep::add_master_obj(Prob& prob, Solver_CPLEX& solver)
 
 	if (prob.obj_coef_raw->size() > 0)
 	{
-		for (int v = 0; v < prob.obj_coef_raw->size(); v++)
+		for (int v = 0; v < prob.obj_coef_raw->size(); ++v)
 		{
 			empty_expr += prob.obj_coef_raw->at(v).val * prob.vars_raw->operator[](prob.obj_coef_raw->at(v).col);
 			if (prob.obj_coef_raw->at(v).val < minVal) minVal = prob.obj_coef_raw->at(v).val;
@@ -680,9 +680,9 @@ void ProbPrep::add_sub_rngs(Prob& prob, Solver_CPLEX& solver)
 void ProbPrep::add_sub_obj(Prob& prob, Solver_CPLEX& solver)
 {
 	
-	for (int v = 0; v < mean_prob->obj_coef_raw->size(); v++)
+	for (int v = 0; v < mean_prob->obj_coef_raw->size(); ++v)
 	{
-		for (int v2 = 0; v2 < solver.getSize(*prob.vars_raw); v2++)
+		for (int v2 = 0; v2 < solver.getSize(*prob.vars_raw); ++v2)
 		{
 			if (mean_prob->obj_coef_raw->at(v).col_name == solver.getName(prob.vars_raw->operator[](v2)))
 			{
@@ -699,7 +699,7 @@ void ProbPrep::add_sub_obj(Prob& prob, Solver_CPLEX& solver)
 
 	if (prob.obj_coef_raw->size() > 0)
 	{
-		for (int i = 0; i < prob.obj_coef_raw->size(); i++)
+		for (int i = 0; i < prob.obj_coef_raw->size(); ++i)
 		{
 			empt_expr += prob.obj_coef_raw->at(i).val * prob.vars_raw->operator[](prob.obj_coef_raw->at(i).col);
 		}
