@@ -1,7 +1,7 @@
 #  readSMPS
 
-[![Source](https://github.com/siavashtab/2slpEval/tree/master/2slpEval)](https://github.com/siavashtab/2slpEval/tree/master/2slpEval)
-[![license](https://github.com/siavashtab/2slpEval/tree/master/LICENSE)](https://github.com/siavashtab/2slpEval/tree/master/LICENSE)
+[![Source]](https://github.com/siavashtab/2slpEval/tree/master/2slpEval)
+[![license]](https://github.com/siavashtab/2slpEval/tree/master/LICENSE)
 
 reading SMPS format files for two-stage stochastic programs
 
