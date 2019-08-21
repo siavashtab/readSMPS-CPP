@@ -49,6 +49,16 @@ void ProbPrep::newRV(RV_info &rv)
 	rv.val = new vec_d;
 }
 
+void ProbPrep::delRV(RV_info &rv)
+{
+	delete rv.CDF ;
+	delete rv.ColName ;
+	delete rv.id ;
+	delete rv.prob ;
+	delete rv.RowName ;
+	delete rv.val ;
+}
+
 void ProbPrep::newSPparam()
 {
 	SPprobINFO->RVs = new std::vector<RV_info>;
@@ -56,6 +66,15 @@ void ProbPrep::newSPparam()
 	SPprobINFO->TIME_col_idx = new vec_i;
 	SPprobINFO->TIME_info = new std::vector<std::vector<std::string>>;
 	SPprobINFO->TIME_row_idx = new vec_i;
+}
+
+void ProbPrep::delSPparam()
+{
+	delete SPprobINFO->RVs ;
+	delete SPprobINFO->STOC_TYPE ;
+	delete SPprobINFO->TIME_col_idx ;
+	delete SPprobINFO->TIME_info ;
+	delete SPprobINFO->TIME_row_idx ;
 }
 
 void ProbPrep::newProb(Prob &tmpProb)
@@ -82,6 +101,32 @@ void ProbPrep::newProb(Prob &tmpProb)
 	tmpProb.strType = new std::string;
 	tmpProb.surro_idx = new vec2_i;
 	tmpProb.xhat = new std::vector<SOL_str>;
+}
+
+void ProbPrep::delProb(Prob &tmpProb)
+{
+	delete tmpProb.beta ;
+	delete tmpProb.beta_sum ;
+	delete tmpProb.Cx ;
+	delete tmpProb.duals ;
+	delete tmpProb.dual_R ;
+	delete tmpProb.dual_tot ;
+	delete tmpProb.strType ;
+	delete tmpProb.id ;
+	delete tmpProb.obj_coef_raw ;
+	delete tmpProb.prev_rng_coefs_raw ;
+	delete tmpProb.prev_vars_raw ;
+	delete tmpProb.probType ;
+	delete tmpProb.rho ;
+	delete tmpProb.rhs ;
+	delete tmpProb.rng_coefs_raw ;
+	delete tmpProb.r_w ;
+	delete tmpProb.sol ;
+	delete tmpProb.sol_R ;
+	delete tmpProb.sol_surrogate ;
+	delete tmpProb.strType ;
+	delete tmpProb.surro_idx;
+	delete tmpProb.xhat ;
 }
 
 void ProbPrep::initialize(std::string filename, int scen_num)
