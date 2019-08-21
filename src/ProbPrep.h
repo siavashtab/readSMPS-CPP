@@ -85,9 +85,14 @@ private:
 	void         fill_out_rhs(Prob& prob, Solver_CPLEX& solver);
 	//***********************************************************
 
+	//***********************************************************
 	void newProb(Prob &tmpProb);
 	void newSPparam();
 	void newRV(RV_info &rv);
+	void delProb(Prob &tmpProb);
+	void delSPparam();
+	void delRV(RV_info &rv);
+	//***********************************************************
 
 };
 
