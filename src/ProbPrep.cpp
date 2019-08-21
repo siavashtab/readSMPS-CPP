@@ -33,13 +33,13 @@ ProbPrep::~ProbPrep()
 {
 	solver->end_solver();
 	delete solver;
-	delProb(master_prob);
+	delProb(*master_prob);
 	delete master_prob;
-	delProb(mean_prob);
+	delProb(*mean_prob);
 	delete mean_prob;
-	delProb(stage_sub_prob);
+	delProb(*stage_sub_prob);
 	delete stage_sub_prob;
-	delSPparam(SPprobINFO);
+	delSPparam(*SPprobINFO);
 	delete SPprobINFO;
 }
 
