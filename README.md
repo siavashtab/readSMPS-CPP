@@ -38,7 +38,7 @@ techniques for stochastic programming which can be done in this code.
 
 - this program will read the SMPS files, decompose the problem
   into a master and subproblem based on the CPLEX (Concert Technology) objects. 
-  The data structure in which problems will be stored are all defined in prob_struct.h
+  The data structure in which problems will be stored are all defined in ~~~ prob_struct.h ~~~
 
 ------------------
 
