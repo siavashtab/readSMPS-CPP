@@ -379,9 +379,6 @@ void ProbPrep::read_STOC_INDEP()
 			{
 				SPprobINFO->rv_num++;
 				SPprobINFO->RVs->push_back(rv_empty);
-				rv_empty.val->clear();
-				rv_empty.prob->clear();
-				rv_empty.CDF->clear();
 				sum = 0;
 			}
 			else
