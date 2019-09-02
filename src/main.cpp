@@ -29,12 +29,8 @@ main()
 	std::cin >> initial_scen;
 
 	//Initial the problem instance
-	ProbPrep* problem;
-	problem = new ProbPrep();
-	problem->initialize(instance, initial_scen);
-
-	problem->~ProbPrep();
-	delete problem;
+	ProbPrep problem;
+	problem.initialize(instance, initial_scen);
 
 
 }
