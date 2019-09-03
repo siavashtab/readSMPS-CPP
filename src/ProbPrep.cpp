@@ -379,6 +379,9 @@ void ProbPrep::read_STOC_INDEP()
 			{
 				SPprobINFO->rv_num++;
 				SPprobINFO->RVs->push_back(rv_empty);
+				rv_empty.val  = new vec_d;
+				rv_empty.prob = new vec_d;
+				rv_empty.CDF  = new std::map<double,double>;
 				sum = 0;
 			}
 			else
