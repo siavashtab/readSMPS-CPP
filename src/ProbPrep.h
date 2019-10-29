@@ -35,7 +35,7 @@ public:
 	void initialize(std::string filename, int scen_num);
 	void Probs_from_SMPS();     //create Probs by reading SMPS files
 
-	Solver_CPLEX * solver;    //vector of solvers - everytime we need a solver we can create one
+	Solver_CPLEX * solver;    //solver struct
 
 	//Mean Prob INFOS
 	Prob * mean_prob;
