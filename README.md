@@ -1,4 +1,4 @@
-#  readSMPS
+#  readSMPS-CPP
 
 [—[Source]—](https://github.com/siavashtab/readSMPS-CPP/tree/master/src)
 [—[license]—](https://github.com/siavashtab/readSMPS-CPP/blob/master/LICENSE)
