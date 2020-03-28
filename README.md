@@ -17,13 +17,13 @@ readSMPS: A package for reading and saving the information of two stage stochast
 
 There are implementations for reading SMPS files which are either written in other 
 programming languages (C or Julia) or do not provide a suitable data structures for L-shaped 
-based algorithms (based on CPLEX solver). Moreover, it would be crucial to facilitate the problem that can handle sampling 
+based algorithms (based on CPLEX solver). Moreover, it would be crucial to facilitate the problem to handle sampling 
 techniques for stochastic programming which can be done in this code.
 
--  this package store the problem information in CPLEX Concert Technology format
+-  this package stores the problem information in CPLEX Concert Technology format
 -  the distribution of random variables are discrete (even if it is not discrete it can be turned to a discrete distribution)
 -  randomness is on the right handside of the recourse problem
--  COR file contains the mean value problem which its optimal value yields a lower bound
+-  COR file contains the mean value problem whose optimal value yields a lower bound
 
 ------------------
 
